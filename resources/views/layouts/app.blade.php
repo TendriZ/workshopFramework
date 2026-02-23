@@ -21,6 +21,19 @@
             
             <div class="main-panel">
                 <div class="content-wrapper">
+                    {{-- Breadcrumb --}}
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb bg-transparent p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('home') }}"><i class="mdi mdi-home"></i> Home</a>
+                                    </li>
+                                    @yield('breadcrumb')
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
                     @yield('content')
                 </div>
                 
@@ -30,6 +43,7 @@
     </div>
 
     @include('layouts.partials.scripts')
+    
     @stack('scripts')
 </body>
 </html>

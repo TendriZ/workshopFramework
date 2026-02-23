@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Kategori;
 use App\Models\Buku;
 use Illuminate\Support\Facades\Hash;
+use Database\Factories\UserFactory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create default user
+        //Create default user
         User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
@@ -27,7 +28,7 @@ class DatabaseSeeder extends Seeder
         $biografi = Kategori::create(['nama_kategori' => 'Biografi']);
         $komik = Kategori::create(['nama_kategori' => 'Komik']);
 
-        // Create books
+        //Create books
         Buku::create([
             'kode' => 'NV-01',
             'judul' => 'Home Sweet Loan',
@@ -48,5 +49,9 @@ class DatabaseSeeder extends Seeder
             'pengarang' => 'Keigo Higashino',
             'idkategori' => $novel->idkategori,
         ]);
+
+        // UserFactory::new()->count(10000)->create();
+        // Kategori::factory()->count(100)->create();
+        // Buku::factory()->count(1000)->create();
     }
 }

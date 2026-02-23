@@ -2,6 +2,11 @@
 
 @section('title', 'Edit Kategori')
 
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('kategori.index') }}">Kategori</a></li>
+<li class="breadcrumb-item active" aria-current="page">Edit</li>
+@endsection
+
 @section('content')
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">

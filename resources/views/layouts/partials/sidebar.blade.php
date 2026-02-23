@@ -35,6 +35,13 @@
             </a>
         </li>
 
+        <li class="nav-item {{ Request::is('pdf*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('pdf.index') }}">
+                <span class="menu-title">Cetak PDF</span>
+                <i class="mdi mdi-file-pdf menu-icon"></i>
+            </a>
+        </li>
+
         
     </ul>
 </nav>

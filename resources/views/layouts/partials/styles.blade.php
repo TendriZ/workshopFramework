@@ -17,4 +17,16 @@
 <link rel="stylesheet" href="{{ asset('template/css/style.css') }}">
 <!-- End layout styles -->
 
+<!-- Custom overrides -->
+<style>
+    .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-toggle::after {
+        font-family: "Material Design Icons";
+        content: "\F0140";
+        border: none;
+        vertical-align: middle;
+        font-size: 1.25rem;
+        color: #b66dff;
+    }
+</style>
+
 <link rel="shortcut icon" href="{{ asset('template/images/favicon.png') }}" />

@@ -2,6 +2,10 @@
 
 @section('title', 'Dashboard')
 
+@section('breadcrumb')
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+@endsection
+
 @section('content')
 <div class="row">
     <div class="col-md-12 grid-margin">

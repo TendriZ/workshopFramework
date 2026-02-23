@@ -2,6 +2,10 @@
 
 @section('title', 'Buku')
 
+@section('breadcrumb')
+<li class="breadcrumb-item active" aria-current="page">Buku</li>
+@endsection
+
 @section('content')
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
