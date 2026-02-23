@@ -122,7 +122,7 @@
                         <a href="{{ route('pdf.index') }}" class="btn btn-secondary">
                             <i class="mdi mdi-arrow-left"></i> Kembali
                         </a>
-                        <button type="submit" class="btn btn-gradient-warning">
+                        <button type="submit" class="btn btn-primary">
                             <i class="mdi mdi-printer"></i> Cetak Sertifikat PDF
                         </button>
                     </div>

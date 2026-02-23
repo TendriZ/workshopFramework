@@ -36,7 +36,6 @@ class PDFController extends Controller
             'dekan'       => 'required|string|max:255',
             'koordinator' => 'required|string|max:255',
             'ketua'       => 'required|string|max:255',
-            'tanggal'     => 'required|date',
         ]);
 
         $pdf = Pdf::loadView('doc.sertifikat', $validated)
