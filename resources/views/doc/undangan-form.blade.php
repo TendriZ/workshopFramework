@@ -32,7 +32,9 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                @endif 
+
+                ALIFFFFFFFFF
 
                 <form action="{{ route('pdf.generate.undangan') }}" method="POST" target="_blank">
                     @csrf
