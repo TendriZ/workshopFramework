@@ -5,6 +5,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 
 
@@ -30,6 +31,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::resource('kategori', KategoriController::class);
     Route::resource('buku', BukuController::class);
+
+    // Barang / Tag Harga UMKM
+    Route::resource('barang', BarangController::class);
+    Route::post('/barang/cetak-tag', [BarangController::class, 'cetakTagHarga'])->name('barang.cetak-tag');
 
     // PDF
     Route::get('/pdf', [PDFController::class, 'index'])->name('pdf.index');

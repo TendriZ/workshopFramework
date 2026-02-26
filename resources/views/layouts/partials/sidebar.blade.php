@@ -3,7 +3,11 @@
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                    <img src="{{ asset('template/images/faces/face1.jpg') }}" alt="profile">
+                    @if(Auth::user()->avatar)
+                        <img src="{{ Auth::user()->avatar }}" alt="profile" referrerpolicy="no-referrer">
+                    @else
+                        <img src="{{ asset('template/images/faces/face1.jpg') }}" alt="profile">
+                    @endif
                     <span class="login-status online"></span>
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
@@ -32,6 +36,13 @@
             <a class="nav-link" href="{{ route('buku.index') }}">
                 <span class="menu-title">Buku</span>
                 <i class="mdi mdi-book-multiple menu-icon"></i>
+            </a>
+        </li>
+
+        <li class="nav-item {{ Request::is('barang*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('barang.index') }}">
+                <span class="menu-title">Tag Harga UMKM</span>
+                <i class="mdi mdi-label menu-icon"></i>
             </a>
         </li>
 

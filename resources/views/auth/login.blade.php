@@ -2,8 +2,11 @@
 
 @section('content')
 <div class="row flex-grow">
-    <div class="col-lg-4 mx-auto">
-        <div class="auth-form-light text-left p-5">
+    <div class="col-lg-6 login-half-bg d-none d-lg-flex flex-row" style="background: url('{{ asset('template/images/auth/login-bg.jpg') }}') no-repeat center center; background-size: cover;">
+        <p class="text-white font-weight-medium text-center flex-grow align-self-end">Copyright &copy; {{ date('Y') }}  All rights reserved.</p>
+    </div>
+    <div class="col-lg-6 mx-auto d-flex align-items-center">
+        <div class="auth-form-light text-left p-5 w-100">
             <div class="brand-logo">
                 <img src="{{ asset('template/images/logo.svg') }}">
             </div>
@@ -28,11 +31,9 @@
                         </span>
                     @enderror
                 </div>
-                <div class="mt-3">
+                <div class="my-2 d-flex justify-content-center align-items-center">
                     <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">MASUK</button>
                 </div>
-
-                
 
                 <div class="my-2 d-flex justify-content-center align-items-center">
                     <a href="{{ route('google.redirect') }}" class="btn btn-block btn-google auth-form-btn">

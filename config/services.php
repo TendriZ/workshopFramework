@@ -43,5 +43,4 @@ return [
             'verify' => env('GUZZLE_VERIFY_SSL', true),
         ],
     ],
-
 ];
