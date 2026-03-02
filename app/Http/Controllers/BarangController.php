@@ -66,23 +66,33 @@ class BarangController extends Controller
     /**
      * Cetak Tag Harga PDF - TnJ no 108 (5 kolom x 8 baris = 40 label per halaman)
      */
-    public function cetakTagHarga(Request $request)
-    {
-        $request->validate([
-            'ids' => 'required|array|min:1',
-            'ids.*' => 'required|string|exists:barang,id_barang',
-            'start_x' => 'required|integer|min:1|max:5',
-            'start_y' => 'required|integer|min:1|max:8',
+    public function cetakTagHarga(Request $request) {
+        $validated = $request->validate([
+            'x_start' => 'required|integer|min:1|max:5',
+            'y_start' => 'required|integer|min:1|max:8',
+            'ids'     => 'required|array|min:1',
+            'ids.*'   => 'required|string|exists:barang,id_barang',
         ]);
 
-        $barangs = Barang::whereIn('id_barang', $request->ids)->get();
-        $startX = (int) $request->start_x;
-        $startY = (int) $request->start_y;
+        // Fetch selected barangs and convert to array format for the template
+        $barangs = Barang::whereIn('id_barang', $validated['ids'])->get();
+        $items = $barangs->map(function ($b) {
+            return [
+                'id_barang' => $b->id_barang,
+                'nama'      => $b->nama,
+                'harga'     => $b->harga,
+                'timestamp' => $b->timestamp,
+            ];
+        })->toArray();
 
-        $pdf = Pdf::loadView('barang.tag-harga-pdf', compact('barangs', 'startX', 'startY'))
-            ->setPaper([0, 0, 609.449, 864.567]) // 215mm x 305mm in points (TnJ 108)
+        $x_start = (int) $validated['x_start'];
+        $y_start = (int) $validated['y_start'];
+
+        // 222mm x 185mm in points (1mm = 2.83465pt)
+        $pdf = Pdf::loadView('barang.tag-harga-pdf', compact('items', 'x_start', 'y_start'))
+            ->setPaper([0, 0, 629.29, 524.41])
             ->setWarnings(false);
 
-        return $pdf->stream('tag_harga_' . now()->format('Ymd_His') . '.pdf');
+        return $pdf->stream('label.pdf');
     }
 }

@@ -105,8 +105,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="start_x">Kolom Awal (X)</label>
-                                <select class="form-control" id="start_x" name="start_x" required>
+                                <label for="x_start">Kolom Awal (X)</label>
+                                <select class="form-control" id="x_start" name="x_start" required>
                                     <option value="1" selected>Kolom 1</option>
                                     <option value="2">Kolom 2</option>
                                     <option value="3">Kolom 3</option>
@@ -117,8 +117,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="start_y">Baris Awal (Y)</label>
-                                <select class="form-control" id="start_y" name="start_y" required>
+                                <label for="y_start">Baris Awal (Y)</label>
+                                <select class="form-control" id="y_start" name="y_start" required>
                                     <option value="1" selected>Baris 1</option>
                                     <option value="2">Baris 2</option>
                                     <option value="3">Baris 3</option>
@@ -228,13 +228,13 @@ $(document).ready(function() {
     });
 
     // Grid preview update
-    $('#start_x, #start_y').on('change', function() {
+    $('#x_start, #y_start').on('change', function() {
         updateGridPreview();
     });
 
     function updateGridPreview() {
-        var sx = parseInt($('#start_x').val());
-        var sy = parseInt($('#start_y').val());
+        var sx = parseInt($('#x_start').val());
+        var sy = parseInt($('#y_start').val());
         var count = $('.check-item:checked').length;
 
         $('.grid-cell').css({ 'background-color': '#fff', 'color': '#999' });

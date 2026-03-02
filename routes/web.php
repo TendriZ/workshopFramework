@@ -33,8 +33,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('buku', BukuController::class);
 
     // Barang / Tag Harga UMKM
-    Route::resource('barang', BarangController::class);
     Route::post('/barang/cetak-tag', [BarangController::class, 'cetakTagHarga'])->name('barang.cetak-tag');
+    Route::resource('barang', BarangController::class);
 
     // PDF
     Route::get('/pdf', [PDFController::class, 'index'])->name('pdf.index');
