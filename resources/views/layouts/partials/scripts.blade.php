@@ -19,6 +19,23 @@
 <script src="{{ asset('template/js/todolist.js') }}"></script>
 <!-- endinject -->
 
+<!-- Global: Submit with Spinner (Studi Kasus 1) -->
+<script>
+function submitWithSpinner(btn) {
+    var form = btn.closest('form');
+    // Cek HTML5 validity
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    // Ubah button jadi spinner, disable untuk cegah double submit
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...';
+    // Submit form
+    form.submit();
+}
+</script>
+
 <!-- Custom js for this page -->
 <script src="{{ asset('template/js/dashboard.js') }}"></script>
 <!-- End custom js for this page -->

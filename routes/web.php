@@ -42,5 +42,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pdf/sertifikat', [PDFController::class, 'generateSertifikat'])->name('pdf.generate.sertifikat');
     Route::get('/pdf/undangan', [PDFController::class, 'undangan'])->name('pdf.undangan');
     Route::post('/pdf/undangan', [PDFController::class, 'generateUndangan'])->name('pdf.generate.undangan');
+
+    // JS Exercise (JavaScript & jQuery)
+    Route::get('/js/barang-html', function () { return view('js-exercise.barang-html'); })->name('js.barang-html');
+    Route::get('/js/barang-datatable', function () { return view('js-exercise.barang-datatable'); })->name('js.barang-datatable');
+    Route::get('/js/select-kota', function () { return view('js-exercise.select-kota'); })->name('js.select-kota');
 });
 

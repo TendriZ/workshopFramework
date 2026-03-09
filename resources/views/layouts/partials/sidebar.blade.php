@@ -53,6 +53,33 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('js/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#jsMenu" aria-expanded="{{ Request::is('js/*') ? 'true' : 'false' }}">
+                <span class="menu-title">JS Exercise</span>
+                <i class="mdi mdi-language-javascript menu-icon"></i>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ Request::is('js/*') ? 'show' : '' }}" id="jsMenu">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('js/barang-html') ? 'active' : '' }}" href="{{ route('js.barang-html') }}">
+                            Barang (HTML Table)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('js/barang-datatable') ? 'active' : '' }}" href="{{ route('js.barang-datatable') }}">
+                            Barang (DataTables)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('js/select-kota') ? 'active' : '' }}" href="{{ route('js.select-kota') }}">
+                            Select Kota
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         
     </ul>
 </nav>

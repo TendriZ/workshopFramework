@@ -45,7 +45,7 @@
                         @enderror
                     </div>
                     
-                    <button type="submit" class="btn btn-primary me-2">Update</button>
+                    <button type="button" class="btn btn-primary me-2" id="btnSubmit" onclick="submitWithSpinner(this)">Update</button>
                     <a href="{{ route('barang.index') }}" class="btn btn-light">Batal</a>
                 </form>
             </div>
