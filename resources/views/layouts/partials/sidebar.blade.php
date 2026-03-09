@@ -19,7 +19,7 @@
         </li>
         
         <li class="nav-item {{ Request::is('home') || Request::is('/') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ url('/home') }}">
+            <a class="nav-link" href="{{ route('home') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
