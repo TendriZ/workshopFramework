@@ -12,7 +12,6 @@
 
 @section('content')
 <div class="row">
-    {{-- Form Input --}}
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -36,7 +35,6 @@
         </div>
     </div>
 
-    {{-- Tabel --}}
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -51,7 +49,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Row ditambahkan oleh JavaScript --}}
                         </tbody>
                     </table>
                 </div>
@@ -60,7 +57,6 @@
     </div>
 </div>
 
-{{-- Modal Edit/Hapus (Studi Kasus 3) --}}
 <div class="modal fade" id="modalCRUD" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -85,7 +81,7 @@
                 </form>
             </div>
             <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="btn btn-danger" id="btnHapus" onclick="hapusBarang()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="hapusBarang()">
                     <i class="mdi mdi-delete"></i> Hapus
                 </button>
                 <button type="button" class="btn btn-success" id="btnUbah" onclick="ubahBarang()">
@@ -102,9 +98,8 @@
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script>
     let counter = 0;
-    let selectedRowData = null; // Menyimpan data row yang diklik
+    let selectedRowData = null; 
 
-    // Inisialisasi DataTable
     var table = $('#tabelBarang').DataTable({
         language: {
             search: "Cari:",
@@ -127,7 +122,6 @@
         order: [[0, 'asc']]
     });
 
-    // ===================== STUDI KASUS 3: Klik row → modal =====================
     $('#tabelBarang tbody').on('click', 'tr', function() {
         var data = table.row(this).data();
         if (!data) return;
@@ -141,12 +135,10 @@
         $('#modalCRUD').modal('show');
     });
 
-    // Cursor pointer pada row
     $('#tabelBarang tbody').on('mouseenter', 'tr', function() {
         $(this).css('cursor', 'pointer');
     });
 
-    // ===================== STUDI KASUS 1: Spinner =====================
     function tambahBarang() {
         var btn = document.getElementById('btnSubmit');
         var form = document.getElementById('formBarang');
@@ -157,23 +149,20 @@
         }
 
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menambahkan...';
 
         setTimeout(function() {
-            // ===================== STUDI KASUS 2: Tambah Row =====================
             counter++;
             var nama = $('#nama').val();
             var harga = $('#harga').val();
             var idBarang = 'BRG' + String(counter).padStart(3, '0');
 
-            // Tambah row ke DataTable
             table.row.add({
                 id: idBarang,
                 nama: nama,
                 harga: harga
             }).draw();
 
-            // Reset form
             $('#nama').val('');
             $('#harga').val('');
 
@@ -183,28 +172,42 @@
         }, 500);
     }
 
-    // ===================== STUDI KASUS 3: Hapus & Ubah =====================
     function hapusBarang() {
-        if (selectedRowData) {
-            selectedRowData.row.remove().draw();
-            selectedRowData = null;
-            $('#modalCRUD').modal('hide');
+        let formModal = document.getElementById('formModal');
+        let btnDelete = document.getElementById('btnDelete');
+
+        if (!formModal.checkValidity()) {
+            formModal.reportValidity();
+            return;
         }
+
+        btnDelete.disabled = true;
+        btnDelete.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menghapus...';
+
+        setTimeout(function(){
+            if (selectedRowData) {
+                selectedRowData.row.remove().draw();
+                selectedRowData = null;
+                $('#modalCRUD').modal('hide');
+            }
+
+            btnDelete.disabled = false;
+            btnDelete.innerHTML = '<i class="mdi mdi-delete"></i> Hapus';
+        }, 500);
+        
     }
 
     function ubahBarang() {
         var formModal = document.getElementById('formModal');
         var btnUbah = document.getElementById('btnUbah');
 
-        // Studi Kasus 1: checkValidity + reportValidity
         if (!formModal.checkValidity()) {
             formModal.reportValidity();
             return;
         }
 
-        // Spinner ON
         btnUbah.disabled = true;
-        btnUbah.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
+        btnUbah.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengubah...';
 
         setTimeout(function() {
             if (selectedRowData) {
@@ -221,7 +224,6 @@
                 $('#modalCRUD').modal('hide');
             }
 
-            // Spinner OFF
             btnUbah.disabled = false;
             btnUbah.innerHTML = '<i class="mdi mdi-pencil"></i> Ubah';
         }, 500);

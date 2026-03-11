@@ -8,7 +8,6 @@
 
 @section('content')
 <div class="row">
-    {{-- Form Input --}}
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -32,7 +31,6 @@
         </div>
     </div>
 
-    {{-- Tabel --}}
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -47,7 +45,6 @@
                             </tr>
                         </thead>
                         <tbody id="tbodyBarang">
-                            {{-- Row ditambahkan oleh JavaScript --}}
                         </tbody>
                     </table>
                 </div>
@@ -56,7 +53,6 @@
     </div>
 </div>
 
-{{-- Modal Edit/Hapus (Studi Kasus 3) --}}
 <div class="modal fade" id="modalCRUD" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -95,27 +91,22 @@
 
 @push('scripts')
 <script>
-    let counter = 0;       // Auto-increment ID
-    let selectedRow = null; // Row yang sedang di-edit di modal
+    let counter = 0;       
+    let selectedRow = null; 
 
-    // ===================== STUDI KASUS 1: Spinner =====================
     function tambahBarang() {
         let btn = document.getElementById('btnSubmit');
         let form = document.getElementById('formBarang');
 
-        // Cek HTML5 validity
         if (!form.checkValidity()) {
             form.reportValidity();
             return;
         }
 
-        // Spinner ON
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
 
-        // Simulasi delay proses (agar spinner terlihat)
         setTimeout(function() {
-            // ===================== STUDI KASUS 2: Tambah Row =====================
             counter++;
             let nama = document.getElementById('nama').value;
             let harga = document.getElementById('harga').value;
@@ -128,7 +119,6 @@
             tr.setAttribute('data-nama', nama);
             tr.setAttribute('data-harga', harga);
 
-            // Studi Kasus 3: onclick pada row → buka modal
             tr.onclick = function() { bukaModal(this); };
 
             tr.innerHTML =
@@ -138,7 +128,6 @@
 
             tbody.appendChild(tr);
 
-            // Reset form
             document.getElementById('nama').value = '';
             document.getElementById('harga').value = '';
 
@@ -148,7 +137,6 @@
         }, 500);
     }
 
-    // ===================== STUDI KASUS 3: Modal CRUD =====================
     function bukaModal(tr) {
         selectedRow = tr;
         document.getElementById('modalId').value = tr.getAttribute('data-id');
@@ -160,24 +148,38 @@
     }
 
     function hapusBarang() {
-        if (selectedRow) {
-            selectedRow.remove();
-            selectedRow = null;
-            bootstrap.Modal.getInstance(document.getElementById('modalCRUD')).hide();
+        let formModal = document.getElementById('formModal');
+        let btnHapus = document.getElementById('btnHapus');
+
+        if (!formModal.checkValidity()) {
+            formModal.reportValidity();
+            return;
         }
+
+        btnHapus.disabled = true;
+        btnHapus.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menghapus...';
+
+        setTimeout(function() {
+            if (selectedRow) {
+                selectedRow.remove();
+                selectedRow = null;
+                bootstrap.Modal.getInstance(document.getElementById('modalCRUD')).hide();
+            }
+
+            btnHapus.disabled = false;  
+            btnHapus.innerHTML = '<i class="mdi mdi-delete"></i> Hapus';
+        }, 500);
     }
 
     function ubahBarang() {
         let formModal = document.getElementById('formModal');
         let btnUbah = document.getElementById('btnUbah');
 
-        // Studi Kasus 1: checkValidity + reportValidity
         if (!formModal.checkValidity()) {
             formModal.reportValidity();
             return;
         }
 
-        // Spinner ON
         btnUbah.disabled = true;
         btnUbah.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
 
@@ -195,7 +197,6 @@
                 bootstrap.Modal.getInstance(document.getElementById('modalCRUD')).hide();
             }
 
-            // Spinner OFF
             btnUbah.disabled = false;
             btnUbah.innerHTML = '<i class="mdi mdi-pencil"></i> Ubah';
         }, 500);

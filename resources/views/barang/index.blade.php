@@ -65,7 +65,7 @@
                                         <form action="{{ route('barang.destroy', $barang->id_barang) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus barang ini?')">
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteWithSpinner(this)">
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
                                         </form>
