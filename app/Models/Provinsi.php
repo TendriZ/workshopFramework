@@ -8,10 +8,14 @@ class Provinsi extends Model
 {
     protected $table = 'provinsi';
     protected $primaryKey = 'id_provinsi';
+    protected $keyType = 'int'; // Explicitly set key type
+    public $incrementing = false; // Non auto-increment ID
     public $timestamps = false;
-    protected $fillable = ['nama'];
+    
+    protected $fillable = ['id_provinsi', 'nama'];
 
-    public function kota()
+    // Relationship: 1 Provinsi has many Kota (plural form)
+    public function kotas()
     {
         return $this->hasMany(Kota::class, 'id_provinsi', 'id_provinsi');
     }

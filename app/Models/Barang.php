@@ -15,4 +15,9 @@ class Barang extends Model
 
     const CREATED_AT = 'timestamp';
     const UPDATED_AT = 'timestamp';
+
+    public function penjualanDetails()
+    {
+        return $this->hasMany(PenjualanDetail::class, 'id_barang', 'id_barang');
+    }
 }

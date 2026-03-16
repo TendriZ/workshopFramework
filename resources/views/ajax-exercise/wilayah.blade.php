@@ -96,28 +96,34 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// ============================================================
-//  CARD 1 — jQuery Ajax
-// ============================================================
+// ========================================================================
+//  CARD 1 — jQuery Ajax (IMPROVED - STANDARD RESPONSE FORMAT)
+// ========================================================================
 
-// Helper: reset select ke default & disable
 function resetSelect(sel, placeholder) {
     sel.html('<option value="0">' + placeholder + '</option>').prop('disabled', true);
 }
 
-// Load provinsi on page load
 $(function() {
+    // Load provinsi on page load
     $.ajax({
         url: "{{ route('wilayah.provinsi') }}",
         type: "GET",
-        success: function(data) {
-            $.each(data, function(i, item) {
-                $('#ajaxProvinsi').append('<option value="'+ item.id_provinsi +'">'+ item.nama +'</option>');
-            });
+        success: function(response) {
+            // ✅ CEK response.status
+            if (response.status === 'success') {
+                // ✅ LOOP response.data
+                $.each(response.data, function(i, item) {
+                    $('#ajaxProvinsi').append('<option value="'+ item.id_provinsi +'">'+ item.nama +'</option>');
+                });
+            }
+        },
+        error: function(xhr) {
+            Swal.fire('Error!', xhr.responseJSON?.message || 'Gagal memuat provinsi', 'error');
         }
     });
 
-    // Provinsi change → load kota, reset kecamatan & kelurahan
+    // Provinsi change
     $('#ajaxProvinsi').on('change', function() {
         var id = $(this).val();
         resetSelect($('#ajaxKota'), 'Pilih Kota');
@@ -130,17 +136,22 @@ $(function() {
         $.ajax({
             url: "{{ url('/ajax/wilayah/kota') }}/" + id,
             type: "GET",
-            success: function(data) {
-                var sel = $('#ajaxKota');
-                sel.prop('disabled', false);
-                $.each(data, function(i, item) {
-                    sel.append('<option value="'+ item.id_kota +'">'+ item.nama +'</option>');
-                });
+            success: function(response) {
+                if (response.status === 'success') {
+                    var sel = $('#ajaxKota');
+                    sel.prop('disabled', false);
+                    $.each(response.data, function(i, item) {
+                        sel.append('<option value="'+ item.id_kota +'">'+ item.nama +'</option>');
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire('Error!', xhr.responseJSON?.message || 'Gagal memuat kota', 'error');
             }
         });
     });
 
-    // Kota change → load kecamatan, reset kelurahan
+    // Kota change
     $('#ajaxKota').on('change', function() {
         var id = $(this).val();
         resetSelect($('#ajaxKecamatan'), 'Pilih Kecamatan');
@@ -152,17 +163,22 @@ $(function() {
         $.ajax({
             url: "{{ url('/ajax/wilayah/kecamatan') }}/" + id,
             type: "GET",
-            success: function(data) {
-                var sel = $('#ajaxKecamatan');
-                sel.prop('disabled', false);
-                $.each(data, function(i, item) {
-                    sel.append('<option value="'+ item.id_kecamatan +'">'+ item.nama +'</option>');
-                });
+            success: function(response) {
+                if (response.status === 'success') {
+                    var sel = $('#ajaxKecamatan');
+                    sel.prop('disabled', false);
+                    $.each(response.data, function(i, item) {
+                        sel.append('<option value="'+ item.id_kecamatan +'">'+ item.nama +'</option>');
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire('Error!', xhr.responseJSON?.message || 'Gagal memuat kecamatan', 'error');
             }
         });
     });
 
-    // Kecamatan change → load kelurahan
+    // Kecamatan change
     $('#ajaxKecamatan').on('change', function() {
         var id = $(this).val();
         resetSelect($('#ajaxKelurahan'), 'Pilih Kelurahan');
@@ -173,12 +189,17 @@ $(function() {
         $.ajax({
             url: "{{ url('/ajax/wilayah/kelurahan') }}/" + id,
             type: "GET",
-            success: function(data) {
-                var sel = $('#ajaxKelurahan');
-                sel.prop('disabled', false);
-                $.each(data, function(i, item) {
-                    sel.append('<option value="'+ item.id_kelurahan +'">'+ item.nama +'</option>');
-                });
+            success: function(response) {
+                if (response.status === 'success') {
+                    var sel = $('#ajaxKelurahan');
+                    sel.prop('disabled', false);
+                    $.each(response.data, function(i, item) {
+                        sel.append('<option value="'+ item.id_kelurahan +'">'+ item.nama +'</option>');
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire('Error!', xhr.responseJSON?.message || 'Gagal memuat kelurahan', 'error');
             }
         });
     });
@@ -197,11 +218,10 @@ $(function() {
     });
 });
 
-// ============================================================
-//  CARD 2 — Axios
-// ============================================================
+// ========================================================================
+//  CARD 2 — Axios (IMPROVED - STANDARD RESPONSE FORMAT)
+// ========================================================================
 
-// Helper: reset select & disable
 function axiosReset(el, placeholder) {
     el.innerHTML = '<option value="0">' + placeholder + '</option>';
     el.disabled = true;
@@ -217,13 +237,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load provinsi
     axios.get("{{ route('wilayah.provinsi') }}")
     .then(function(response) {
-        response.data.forEach(function(item) {
-            var opt = new Option(item.nama, item.id_provinsi);
-            selProv.appendChild(opt);
-        });
+        // ✅ CEK response.data.status
+        if (response.data.status === 'success') {
+            // ✅ LOOP response.data.data
+            response.data.data.forEach(function(item) {
+                selProv.appendChild(new Option(item.nama, item.id_provinsi));
+            });
+        }
     })
     .catch(function(error) {
-        console.log(error);
+        Swal.fire('Error!', error.response?.data?.message || 'Gagal memuat provinsi', 'error');
     });
 
     // Provinsi change
@@ -238,12 +261,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         axios.get("{{ url('/ajax/wilayah/kota') }}/" + id)
         .then(function(response) {
-            selKota.disabled = false;
-            response.data.forEach(function(item) {
-                selKota.appendChild(new Option(item.nama, item.id_kota));
-            });
+            if (response.data.status === 'success') {
+                selKota.disabled = false;
+                response.data.data.forEach(function(item) {
+                    selKota.appendChild(new Option(item.nama, item.id_kota));
+                });
+            }
         })
-        .catch(function(error) { console.log(error); });
+        .catch(function(error) {
+            Swal.fire('Error!', error.response?.data?.message || 'Gagal memuat kota', 'error');
+        });
     });
 
     // Kota change
@@ -257,12 +284,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         axios.get("{{ url('/ajax/wilayah/kecamatan') }}/" + id)
         .then(function(response) {
-            selKec.disabled = false;
-            response.data.forEach(function(item) {
-                selKec.appendChild(new Option(item.nama, item.id_kecamatan));
-            });
+            if (response.data.status === 'success') {
+                selKec.disabled = false;
+                response.data.data.forEach(function(item) {
+                    selKec.appendChild(new Option(item.nama, item.id_kecamatan));
+                });
+            }
         })
-        .catch(function(error) { console.log(error); });
+        .catch(function(error) {
+            Swal.fire('Error!', error.response?.data?.message || 'Gagal memuat kecamatan', 'error');
+        });
     });
 
     // Kecamatan change
@@ -275,12 +306,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         axios.get("{{ url('/ajax/wilayah/kelurahan') }}/" + id)
         .then(function(response) {
-            selKel.disabled = false;
-            response.data.forEach(function(item) {
-                selKel.appendChild(new Option(item.nama, item.id_kelurahan));
-            });
+            if (response.data.status === 'success') {
+                selKel.disabled = false;
+                response.data.data.forEach(function(item) {
+                    selKel.appendChild(new Option(item.nama, item.id_kelurahan));
+                });
+            }
         })
-        .catch(function(error) { console.log(error); });
+        .catch(function(error) {
+            Swal.fire('Error!', error.response?.data?.message || 'Gagal memuat kelurahan', 'error');
+        });
     });
 
     // Kelurahan change → show result

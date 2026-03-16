@@ -89,30 +89,23 @@
 @endsection
 
 @push('scripts')
-{{-- Axios CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-{{-- SweetAlert2 CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// State
-var barangDitemukan = null; // data barang yang ditemukan via ajax
-var useAxios = false;       // toggle mode
+var barangDitemukan = null; 
+var useAxios = false;       
 
-// Toggle mode switch
 $('#switchMode').on('change', function() {
     useAxios = this.checked;
     $('#modeLabel').text(useAxios ? 'Mode: Axios' : 'Mode: jQuery Ajax');
 });
 
-// Format rupiah
 function formatRupiah(angka) {
     return 'Rp ' + parseInt(angka).toLocaleString('id-ID');
 }
 
-// ============================================================
-//  CARI BARANG — Enter pada input kode
-// ============================================================
+// ini eventListener Enter buat kalo kita enter, itu bakalan ngecek barang di server, whether ada atau engga
 $('#kodeBarang').on('keydown', function(e) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -128,7 +121,7 @@ $('#kodeBarang').on('keydown', function(e) {
     barangDitemukan = null;
 
     if (useAxios) {
-        // --- Axios ---
+        // ini versi Axios 
         axios.get("{{ url('/ajax/pos/cari') }}", { params: { kode: kode } })
         .then(function(response) {
             handleCariSuccess(response.data);
@@ -137,7 +130,7 @@ $('#kodeBarang').on('keydown', function(e) {
             handleCariError(error.response ? error.response.data : null);
         });
     } else {
-        // --- jQuery Ajax ---
+        // ini versi jQuery Ajax
         $.ajax({
             url: "{{ url('/ajax/pos/cari') }}",
             type: "GET",
@@ -171,7 +164,7 @@ function handleCariError(data) {
     Swal.fire('Tidak Ditemukan', data ? data.message : 'Barang tidak ditemukan', 'warning');
 }
 
-// Cek tombol tambah: aktif hanya bila barang ditemukan & jumlah > 0
+// Cek tombol tambah aktif atau engga, berdasarkan apakah barang ditemukan dan jumlahnya valid
 $('#jumlahBarang').on('input', function() { cekTombolTambah(); });
 
 function cekTombolTambah() {
@@ -179,9 +172,7 @@ function cekTombolTambah() {
     $('#btnTambahkan').prop('disabled', !(barangDitemukan && jumlah > 0));
 }
 
-// ============================================================
-//  TAMBAHKAN KE TABLE
-// ============================================================
+// Fungsi ini buat nambahin barang ke tabel belanja
 function tambahKeTable() {
     if (!barangDitemukan) return;
 
@@ -191,18 +182,18 @@ function tambahKeTable() {
     var jumlah  = parseInt($('#jumlahBarang').val()) || 1;
     var subtotal = harga * jumlah;
 
-    // Cek apakah kode sudah ada di tabel
+    // ini buat ngecek apakah di tabel nya itu ada barang apa engga
     var existingRow = $('#tabelBelanja tbody tr[data-kode="' + kode + '"]');
 
     if (existingRow.length > 0) {
-        // Update jumlah & subtotal
+        // bagian ini huat ngupdate jumlah sama subtotal
         var oldJumlah = parseInt(existingRow.find('.col-jumlah input').val());
         var newJumlah = oldJumlah + jumlah;
         existingRow.find('.col-jumlah input').val(newJumlah);
         existingRow.find('.col-subtotal').text(formatRupiah(harga * newJumlah));
         existingRow.attr('data-harga', harga);
     } else {
-        // Tambah baris baru
+        // nambah baris baru
         var tr = '<tr data-kode="' + kode + '" data-harga="' + harga + '">' +
             '<td>' + kode + '</td>' +
             '<td>' + nama + '</td>' +
@@ -224,9 +215,7 @@ function tambahKeTable() {
     resetForm();
 }
 
-// ============================================================
-//  UBAH JUMLAH di tabel
-// ============================================================
+
 function ubahJumlah(input) {
     var tr = $(input).closest('tr');
     var harga = parseInt(tr.attr('data-harga'));
@@ -241,17 +230,13 @@ function ubahJumlah(input) {
     hitungTotal();
 }
 
-// ============================================================
-//  HAPUS BARIS
-// ============================================================
+
 function hapusBaris(el) {
     $(el).closest('tr').remove();
     hitungTotal();
 }
 
-// ============================================================
-//  HITUNG TOTAL
-// ============================================================
+
 function hitungTotal() {
     var total = 0;
     $('#tabelBelanja tbody tr').each(function() {
@@ -263,9 +248,7 @@ function hitungTotal() {
     $('#btnBayar').prop('disabled', total <= 0);
 }
 
-// ============================================================
-//  RESET FORM
-// ============================================================
+
 function resetForm() {
     barangDitemukan = null;
     $('#kodeBarang').val('').focus();
@@ -275,9 +258,7 @@ function resetForm() {
     $('#btnTambahkan').prop('disabled', true);
 }
 
-// ============================================================
-//  BAYAR — simpan ke database
-// ============================================================
+
 function prosesBayar(btn) {
     var items = [];
     var total = 0;
