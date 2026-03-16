@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\PosController;    
 
 
 Route::get('/', function () {
@@ -47,5 +50,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/js/barang-html', function () { return view('js-exercise.barang-html'); })->name('js.barang-html');
     Route::get('/js/barang-datatable', function () { return view('js-exercise.barang-datatable'); })->name('js.barang-datatable');
     Route::get('/js/select-kota', function () { return view('js-exercise.select-kota'); })->name('js.select-kota');
+
+    // Ajax Exercise (Modul 5)
+    Route::get('/ajax/wilayah', function () { return view('ajax-exercise.wilayah'); })->name('ajax.wilayah');
+    Route::get('/ajax/wilayah/provinsi', [WilayahController::class, 'provinsi'])->name('wilayah.provinsi');
+    Route::get('/ajax/wilayah/kota/{id_provinsi}', [WilayahController::class, 'kota'])->name('wilayah.kota');
+    Route::get('/ajax/wilayah/kecamatan/{id_kota}', [WilayahController::class, 'kecamatan'])->name('wilayah.kecamatan');
+    Route::get('/ajax/wilayah/kelurahan/{id_kecamatan}', [WilayahController::class, 'kelurahan'])->name('wilayah.kelurahan');
+
+    Route::get('/ajax/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::get('/ajax/pos/cari', [PosController::class, 'cariBarang'])->name('pos.cari');
+    Route::post('/ajax/pos/bayar', [PosController::class, 'bayar'])->name('pos.bayar');
 });
 

@@ -80,6 +80,28 @@
             </div>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('ajax/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#ajaxMenu" aria-expanded="{{ Request::is('ajax/*') ? 'true' : 'false' }}">
+                <span class="menu-title">Ajax Exercise</span>
+                <i class="mdi mdi-swap-horizontal menu-icon"></i>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ Request::is('ajax/*') ? 'show' : '' }}" id="ajaxMenu">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('ajax/wilayah') ? 'active' : '' }}" href="{{ route('ajax.wilayah') }}">
+                            Select Wilayah
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('ajax/pos') ? 'active' : '' }}" href="{{ route('pos.index') }}">
+                            Point of Sales
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         
     </ul>
 </nav>
