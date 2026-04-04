@@ -22,6 +22,11 @@ class PaymentGatewayController extends Controller
         return view('payment-gateway.customer');
     }
 
+    public function customerPageasAdmin()
+    {
+        return view('payment-gateway.customer-asAdmin');
+    }
+
     public function listVendor()
     {
         return response()->json([

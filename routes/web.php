@@ -30,12 +30,10 @@ Auth::routes();
 Route::get('/test', [HomeController::class, 'test'])->name('test');
 
 // Modul 6 - Payment Gateway (Customer / Public)
-Route::get('/payment-gateway/customer', [PaymentGatewayController::class, 'customerPage'])->name('pg.customer');
-Route::post('/payment-gateway/order', [PaymentGatewayController::class, 'createOrder'])->name('pg.order');
-Route::post('/payment-gateway/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay');
-Route::post('/payment-gateway/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification');
-Route::get('/payment-gateway/api/vendors', [PaymentGatewayController::class, 'listVendor'])->name('pg.api.vendors');
-Route::get('/payment-gateway/api/vendors/{idvendor}/menus', [PaymentGatewayController::class, 'listMenuByVendor'])->name('pg.api.vendor-menus');
+Route::get('/kantin/customer', [PaymentGatewayController::class, 'customerPage'])->name('pg.customer');
+Route::post('/kantin/order', [PaymentGatewayController::class, 'createOrder'])->name('pg.order');
+Route::post('/kantin/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay');
+Route::post('/kantin/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification');
 
 
 
@@ -72,11 +70,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ajax/pos/bayar', [PosController::class, 'bayar'])->name('pos.bayar');
 
     // Modul 6 - Payment Gateway (Vendor / Auth)
-    Route::get('/payment-gateway/vendor/menu', [PaymentGatewayController::class, 'vendorMenuIndex'])->name('pg.vendor.menu');
-    Route::post('/payment-gateway/vendor/menu', [PaymentGatewayController::class, 'vendorMenuStore'])->name('pg.vendor.menu.store');
-    Route::put('/payment-gateway/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuUpdate'])->name('pg.vendor.menu.update');
-    Route::delete('/payment-gateway/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuDestroy'])->name('pg.vendor.menu.destroy');
+    Route::get('/asAdmin/kantin/customer', [PaymentGatewayController::class, 'customerPageasAdmin'])->name('pg.customer.asAdmin');
+    Route::post('/asAdmin/kantin/order', [PaymentGatewayController::class, 'createOrder'])->name('pg.order.asAdmin');
+    Route::post('/asAdmin/kantin/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay.asAdmin');
+    Route::post('/asAdmin/kantin/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification.asAdmin');
 
-    Route::get('/payment-gateway/vendor/pesanan-lunas', [PaymentGatewayController::class, 'paidOrders'])->name('pg.vendor.paid-orders');
+    Route::get('/kantin/api/vendors', [PaymentGatewayController::class, 'listVendor'])->name('pg.api.vendors');
+    Route::get('/kantin/api/vendors/{idvendor}/menus', [PaymentGatewayController::class, 'listMenuByVendor'])->name('pg.api.vendor-menus');
+    Route::get('/kantin/vendor/menu', [PaymentGatewayController::class, 'vendorMenuIndex'])->name('pg.vendor.menu');
+    Route::post('/kantin/vendor/menu', [PaymentGatewayController::class, 'vendorMenuStore'])->name('pg.vendor.menu.store');
+    Route::put('/kantin/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuUpdate'])->name('pg.vendor.menu.update');
+    Route::delete('/kantin/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuDestroy'])->name('pg.vendor.menu.destroy');
+    Route::get('/kantin/vendor/pesanan-lunas', [PaymentGatewayController::class, 'paidOrders'])->name('pg.vendor.paid-orders');
 });
 

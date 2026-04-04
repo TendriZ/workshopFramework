@@ -31,16 +31,6 @@
                             Customer - Pesan & Bayar
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('payment-gateway/vendor/menu') ? 'active' : '' }}" href="{{ route('pg.vendor.menu') }}">
-                            Vendor - Master Menu
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('payment-gateway/vendor/pesanan-lunas') ? 'active' : '' }}" href="{{ route('pg.vendor.paid-orders') }}">
-                            Vendor - Pesanan Lunas
-                        </a>
-                    </li>
                 </ul>
             </div>
         </li>
