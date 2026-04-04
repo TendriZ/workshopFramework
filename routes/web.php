@@ -9,7 +9,8 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\PosController;    
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\PaymentGatewayController;
 
 
 Route::get('/', function () {
@@ -27,6 +28,14 @@ Route::post('/verifikasi-otp/resend', [GoogleAuthController::class, 'resendOtp']
 Auth::routes();
 
 Route::get('/test', [HomeController::class, 'test'])->name('test');
+
+// Modul 6 - Payment Gateway (Customer / Public)
+Route::get('/payment-gateway/customer', [PaymentGatewayController::class, 'customerPage'])->name('pg.customer');
+Route::post('/payment-gateway/order', [PaymentGatewayController::class, 'createOrder'])->name('pg.order');
+Route::post('/payment-gateway/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay');
+Route::post('/payment-gateway/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification');
+Route::get('/payment-gateway/api/vendors', [PaymentGatewayController::class, 'listVendor'])->name('pg.api.vendors');
+Route::get('/payment-gateway/api/vendors/{idvendor}/menus', [PaymentGatewayController::class, 'listMenuByVendor'])->name('pg.api.vendor-menus');
 
 
 
@@ -61,5 +70,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ajax/pos', [PosController::class, 'index'])->name('pos.index');
     Route::get('/ajax/pos/cari', [PosController::class, 'cariBarang'])->name('pos.cari');
     Route::post('/ajax/pos/bayar', [PosController::class, 'bayar'])->name('pos.bayar');
+
+    // Modul 6 - Payment Gateway (Vendor / Auth)
+    Route::get('/payment-gateway/vendor/menu', [PaymentGatewayController::class, 'vendorMenuIndex'])->name('pg.vendor.menu');
+    Route::post('/payment-gateway/vendor/menu', [PaymentGatewayController::class, 'vendorMenuStore'])->name('pg.vendor.menu.store');
+    Route::put('/payment-gateway/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuUpdate'])->name('pg.vendor.menu.update');
+    Route::delete('/payment-gateway/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuDestroy'])->name('pg.vendor.menu.destroy');
+
+    Route::get('/payment-gateway/vendor/pesanan-lunas', [PaymentGatewayController::class, 'paidOrders'])->name('pg.vendor.paid-orders');
 });
 
