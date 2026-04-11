@@ -161,7 +161,7 @@ function removeItem(index) {
 }
 
 async function loadVendors() {
-    const res = await axios.get("{{ route('pg.api.vendors') }}");
+    const res = await axios.get("{{ route('pg.api.vendors.for.customer') }}");
     const sel = document.getElementById('idvendor');
     sel.innerHTML = '<option value="">Pilih vendor</option>';
     (res.data.data || []).forEach(v => {
@@ -170,7 +170,7 @@ async function loadVendors() {
 }
 
 async function loadMenus(idvendor) {
-    const res = await axios.get("{{ url('/payment-gateway/api/vendors') }}/" + idvendor + "/menus");
+    const res = await axios.get("{{ route('pg.api.vendor-menus.for.customer', ['idvendor' => ':idvendor']) }}".replace(':idvendor', idvendor));
     const sel = document.getElementById('idmenu');
     sel.innerHTML = '<option value="">Pilih menu</option>';
     menuMap = {};

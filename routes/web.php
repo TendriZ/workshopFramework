@@ -32,6 +32,8 @@ Route::get('/test', [HomeController::class, 'test'])->name('test');
 // Modul 6 - Payment Gateway (Customer / Public)
 Route::get('/kantin/customer', [PaymentGatewayController::class, 'customerPage'])->name('pg.customer');
 Route::post('/kantin/order', [PaymentGatewayController::class, 'createOrder'])->name('pg.order');
+Route::get('/kantin/api/vendors-customer', [PaymentGatewayController::class, 'listVendorForCustomer'])->name('pg.api.vendors.for.customer');
+Route::get('/kantin/api/vendors-customer/{idvendor}/menus', [PaymentGatewayController::class, 'listMenuByVendorForCustomer'])->name('pg.api.vendor-menus.for.customer');
 Route::post('/kantin/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay');
 Route::post('/kantin/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification');
 

@@ -37,7 +37,29 @@ class PaymentGatewayController extends Controller
         ]);
     }
 
+    public function listVendorForCustomer()
+    {
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Data vendor berhasil diambil',
+            'data' => Vendor::orderBy('nama_vendor')->get(),
+        ]);
+    }
+
     public function listMenuByVendor($idvendor)
+    {
+        $menus = Menu::where('idvendor', $idvendor)->orderBy('nama_menu')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Data menu berhasil diambil',
+            'data' => $menus,
+        ]);
+    }
+
+    public function listMenuByVendorForCustomer($idvendor)
     {
         $menus = Menu::where('idvendor', $idvendor)->orderBy('nama_menu')->get();
 
