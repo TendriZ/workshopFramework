@@ -39,6 +39,8 @@ Route::post('/kantin/midtrans/notification', [PaymentGatewayController::class, '
 
 
 
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::resource('kategori', KategoriController::class);
@@ -84,5 +86,28 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/kantin/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuUpdate'])->name('pg.vendor.menu.update');
     Route::delete('/kantin/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuDestroy'])->name('pg.vendor.menu.destroy');
     Route::get('/kantin/vendor/pesanan-lunas', [PaymentGatewayController::class, 'paidOrders'])->name('pg.vendor.paid-orders');
+
+    // Customer
+    Route::get('/customer/index', [App\Http\Controllers\CustomerController::class, 'index'])->name('customer.index');
+    Route::get('/customer/create1', [App\Http\Controllers\CustomerController::class, 'create1'])->name('customer.create1');
+    Route::post('/customer/store1', [App\Http\Controllers\CustomerController::class, 'store1'])->name('customer.store1');
+    Route::get('/customer/create2', [App\Http\Controllers\CustomerController::class, 'create2'])->name('customer.create2');
+    Route::post('/customer/store2', [App\Http\Controllers\CustomerController::class, 'store2'])->name('customer.store2');
+});
+
+// =============================================
+// VENDOR AUTH
+// =============================================
+Route::get('/vendor/login',  [App\Http\Controllers\VendorAuthController::class, 'showLogin'])->name('vendor.login');
+Route::post('/vendor/login', [App\Http\Controllers\VendorAuthController::class, 'login'])->name('vendor.login.post');
+Route::post('/vendor/logout',[App\Http\Controllers\VendorAuthController::class, 'logout'])->name('vendor.logout');
+
+// =============================================
+// VENDOR DASHBOARD (proteksi pakai vendor.auth)
+// =============================================
+Route::middleware(['vendor.auth'])->group(function () {
+    Route::get('/vendor/dashboard',    [App\Http\Controllers\VendorController::class, 'index'])->name('vendor.dashboard');
+    Route::post('/vendor/menu',        [App\Http\Controllers\VendorController::class, 'storeMenu'])->name('vendor.menu.store');
+    Route::delete('/vendor/menu/{id}', [App\Http\Controllers\VendorController::class, 'destroyMenu'])->name('vendor.menu.destroy');
 });
 

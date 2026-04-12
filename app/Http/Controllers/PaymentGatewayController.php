@@ -189,6 +189,11 @@ class PaymentGatewayController extends Controller
         $status = Transaction::status($pesanan->order_id_midtrans);
         $this->applyMidtransStatus($pesanan, (array) $status);
 
+        $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $qrResult = $writer->write($qrCode);
+        $qrBase64 = base64_encode($qrResult->getString());
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
@@ -198,6 +203,7 @@ class PaymentGatewayController extends Controller
                 'order_id_midtrans' => $pesanan->order_id_midtrans,
                 'metode_bayar' => $pesanan->metode_bayar,
                 'status_bayar' => $pesanan->status_bayar,
+                'qrcode_base64' => $qrBase64,
             ],
         ]);
     }

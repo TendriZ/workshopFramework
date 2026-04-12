@@ -1,15 +1,8 @@
 @extends('layouts.app-customer')
 
-@section('title', 'Payment Gateway - Customer')
+@section('title', 'Payment Menu')
 
-@section('breadcrumb')
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Payment Gateway (Customer)</li>
-    </ol>
-</nav>
-@endsection
+
 
 @section('content')
 <div class="row">
@@ -301,12 +294,17 @@ async function verifyOrderStatus() {
     }
 
     try {
-        const res = await axios.post("{{ url('/payment-gateway/pay') }}/" + currentOrderId, {}, {
+        const res = await axios.post("{{ url('/kantin/pay') }}/" + currentOrderId, {}, {
             headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" }
         });
 
         if (res.data.data.status_bayar === 1) {
-            Swal.fire('Lunas', 'Pembayaran berhasil. Status pesanan menjadi lunas.', 'success');
+            Swal.fire({
+                title: 'Lunas',
+                html: '<p>Pembayaran berhasil. Status pesanan menjadi lunas. Berikut adalah QR Code pesanan Anda:</p>' +
+                      '<img src="data:image/png;base64,' + res.data.data.qrcode_base64 + '" style="margin-top: 15px; max-width: 200px;">',
+                icon: 'success'
+            });
             cart = [];
             currentOrderId = null;
             currentMidtransOrderId = null;

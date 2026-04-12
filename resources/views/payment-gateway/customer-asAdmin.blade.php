@@ -301,12 +301,17 @@ async function verifyOrderStatus() {
     }
 
     try {
-        const res = await axios.post("{{ url('/payment-gateway/pay') }}/" + currentOrderId, {}, {
+        const res = await axios.post("{{ url('/asAdmin/kantin/pay') }}/" + currentOrderId, {}, {
             headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" }
         });
 
         if (res.data.data.status_bayar === 1) {
-            Swal.fire('Lunas', 'Pembayaran berhasil. Status pesanan menjadi lunas.', 'success');
+            Swal.fire({
+                title: 'Lunas',
+                html: '<p>Pembayaran berhasil. Status pesanan menjadi lunas. Berikut adalah QR Code pesanan Anda:</p>' +
+                      '<img src="data:image/png;base64,' + res.data.data.qrcode_base64 + '" style="margin-top: 15px; max-width: 200px;">',
+                icon: 'success'
+            });
             cart = [];
             currentOrderId = null;
             currentMidtransOrderId = null;

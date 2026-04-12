@@ -113,11 +113,16 @@
         }
 
         .label-id {
+            text-align: right;
+            font-size: 4pt;
+            color: #aaaaaa;
+            margin-top: 1px;
+        }
+        
+        .barcode-container {
             position: absolute;
             bottom: 1mm;
             right: 1.5mm;
-            font-size: 4pt;
-            color: #aaaaaa;
         }
     </style>
 </head>
@@ -194,7 +199,13 @@
                                     <div class="label-nama">{{ $slot['nama'] }}</div>
                                     <div class="label-harga">Rp {{ number_format($slot['harga'], 0, ',', '.') }}</div>
                                     <div class="label-timestamp">{{ $slot['timestamp'] }}</div>
-                                    <div class="label-id">{{ $slot['id_barang'] }}</div>
+                                    <div class="barcode-container">
+                                        @php
+                                            $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+                                        @endphp
+                                        <img src="data:image/png;base64,{{ base64_encode($generator->getBarcode($slot['id_barang'], $generator::TYPE_CODE_128)) }}" style="height: 6px; max-width: 15mm;" alt="barcode">
+                                        <div class="label-id">{{ $slot['id_barang'] }}</div>
+                                    </div>
                                 </div>
                             @else
                                 <div class="label-empty"></div>
