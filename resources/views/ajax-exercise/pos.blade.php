@@ -319,11 +319,14 @@ function handleBayarSuccess(response, btn) {
     btn.disabled = false;
     btn.innerHTML = '<i class="mdi mdi-cash-register"></i> Bayar';
 
-    Swal.fire(
-        'Success!',
-        'Pembayaran berhasil disimpan. ID Transaksi: ' + response.data.id_penjualan,
-        'success'
-    );
+    Swal.fire({
+        title: 'Success!',
+        text: 'Pembayaran berhasil disimpan. ID Transaksi: ' + response.data.id_penjualan,
+        icon: 'success',
+        showConfirmButton: true
+    }).then(() => {
+        window.location.href = "{{ url('/pos/success') }}/" + response.data.id_penjualan;
+    });
 
     // Kosongkan semua
     $('#tabelBelanja tbody').html('');

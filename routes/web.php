@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ajax/pos', [PosController::class, 'index'])->name('pos.index');
     Route::get('/ajax/pos/cari', [PosController::class, 'cariBarang'])->name('pos.cari');
     Route::post('/ajax/pos/bayar', [PosController::class, 'bayar'])->name('pos.bayar');
+    Route::get('/pos/success/{id}', [PosController::class, 'success'])->name('pos.success');
 
     // Modul 6 - Payment Gateway (Vendor / Auth)
     Route::get('/asAdmin/kantin/customer', [PaymentGatewayController::class, 'customerPageasAdmin'])->name('pg.customer.asAdmin');

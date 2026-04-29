@@ -7,6 +7,7 @@ use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Endroid\QrCode\Builder\Builder;
 
 class PosController extends Controller
 {
@@ -79,5 +80,32 @@ class PosController extends Controller
                 'message' => 'Gagal menyimpan pembayaran',
             ], 500);
         }
+    }
+
+    public function success($id_penjualan)
+    {
+        $penjualan = Penjualan::where('id_penjualan', $id_penjualan)->firstOrFail();
+        $details = PenjualanDetail::where('id_penjualan', $id_penjualan)
+            ->join('barang', 'penjualan_detail.id_barang', '=', 'barang.id_barang')
+            ->select('barang.nama as nama', 'penjualan_detail.jumlah as qty', 'barang.harga', 'penjualan_detail.subtotal')
+            ->get();
+
+        $data = [
+            'id_penjualan'   => $penjualan->id_penjualan,
+            'timestamp'      => $penjualan->created_at ? $penjualan->created_at->format('Y-m-d H:i:s') : date('Y-m-d H:i:s'),
+            'items'          => $details->toArray(),
+            'total'          => $penjualan->total,
+            'payment_status' => 'PAID'
+        ];
+
+        $result = Builder::create()
+            ->data(json_encode($data))
+            ->size(200)
+            ->margin(10)
+            ->build();
+
+        $qr_code_base64 = base64_encode($result->getString());
+
+        return view('pos.success', compact('penjualan', 'details', 'qr_code_base64'));
     }
 }
