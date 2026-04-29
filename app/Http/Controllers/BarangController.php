@@ -58,7 +58,7 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
-        $barang->delete();
+        $barang->query()->where('id_barang', $barang->id_barang)->delete();
 
         return redirect()->route('barang.index')
                          ->with('success', 'Barang berhasil dihapus!');
@@ -76,7 +76,7 @@ class BarangController extends Controller
         ]);
 
         // Fetch selected barangs and convert to array format for the template
-        $barangs = Barang::whereIn('id_barang', $validated['ids'])->get();
+        $barangs = Barang::query()->whereIn('id_barang', $validated['ids'], 'and', false)->get();
         $generator = new BarcodeGeneratorPNG();
         $items = $barangs->map(function ($b) use ($generator) {
             return [

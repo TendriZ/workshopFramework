@@ -18,7 +18,7 @@ class PosController extends Controller
 
     public function cariBarang(Request $request)
     {
-        $barang = Barang::find($request->kode);
+        $barang = Barang::query()->find($request->kode);
 
         if (!$barang) {
             return response()->json([
@@ -84,8 +84,8 @@ class PosController extends Controller
 
     public function success($id_penjualan)
     {
-        $penjualan = Penjualan::where('id_penjualan', $id_penjualan)->firstOrFail();
-        $details = PenjualanDetail::where('id_penjualan', $id_penjualan)
+        $penjualan = Penjualan::query()->where('id_penjualan', '=', $id_penjualan)->firstOrFail();
+        $details = PenjualanDetail::query()->where('id_penjualan', '=', $id_penjualan)
             ->join('barang', 'penjualan_detail.id_barang', '=', 'barang.id_barang')
             ->select('barang.nama as nama', 'penjualan_detail.jumlah as qty', 'barang.harga', 'penjualan_detail.subtotal')
             ->get();
@@ -98,11 +98,14 @@ class PosController extends Controller
             'payment_status' => 'PAID'
         ];
 
-        $result = Builder::create()
-            ->data(json_encode($data))
-            ->size(200)
-            ->margin(10)
-            ->build();
+        $qrCode = new \Endroid\QrCode\QrCode(
+            data: json_encode($data),
+            size: 200,
+            margin: 10
+        );
+
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $result = $writer->write($qrCode);
 
         $qr_code_base64 = base64_encode($result->getString());
 
