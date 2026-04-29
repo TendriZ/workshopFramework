@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class BarangController extends Controller
 {
@@ -76,12 +77,14 @@ class BarangController extends Controller
 
         // Fetch selected barangs and convert to array format for the template
         $barangs = Barang::whereIn('id_barang', $validated['ids'])->get();
-        $items = $barangs->map(function ($b) {
+        $generator = new BarcodeGeneratorPNG();
+        $items = $barangs->map(function ($b) use ($generator) {
             return [
                 'id_barang' => $b->id_barang,
                 'nama'      => $b->nama,
                 'harga'     => $b->harga,
                 'timestamp' => $b->timestamp,
+                'barcode'   => base64_encode($generator->getBarcode($b->id_barang, $generator::TYPE_CODE_128)),
             ];
         })->toArray();
 
