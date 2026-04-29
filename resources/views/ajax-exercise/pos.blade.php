@@ -96,6 +96,8 @@
 var barangDitemukan = null; 
 var useAxios = false;       
 
+const beepAudio = new Audio("{{ asset('audio/beep.mp3') }}");
+
 $('#switchMode').on('change', function() {
     useAxios = this.checked;
     $('#modeLabel').text(useAxios ? 'Mode: Axios' : 'Mode: jQuery Ajax');
@@ -147,6 +149,9 @@ $('#kodeBarang').on('keydown', function(e) {
 
 function handleCariSuccess(response) {
     if (response.status === 'success') {
+        beepAudio.currentTime = 0;
+        beepAudio.play().catch(e => console.log('Audio Error:', e));
+
         barangDitemukan = response.data;
         $('#namaBarang').val(barangDitemukan.nama);
         $('#hargaBarang').val(formatRupiah(barangDitemukan.harga));
