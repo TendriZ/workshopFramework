@@ -305,20 +305,16 @@ async function verifyOrderStatus() {
             headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" }
         });
 
-        if (res.data.data.status_bayar === 1) {
+        if (res.data.data.status_bayar === 1 || res.data.data.status_bayar === 'settlement' || res.data.data.status_bayar === 'capture') {
             Swal.fire({
                 title: 'Lunas',
-                html: '<p>Pembayaran berhasil. Status pesanan menjadi lunas. Berikut adalah QR Code pesanan Anda:</p>' +
-                      '<img src="data:image/png;base64,' + res.data.data.qrcode_base64 + '" style="margin-top: 15px; max-width: 200px;">',
-                icon: 'success'
+                text: 'Pembayaran berhasil dikonfirmasi. Mengalihkan ke Struk QR...',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "{{ url('/kantin/receipt') }}/" + currentOrderId;
             });
-            cart = [];
-            currentOrderId = null;
-            currentMidtransOrderId = null;
-            currentSnapToken = null;
-            refreshCartTable();
-            document.getElementById('paymentSection').classList.add('d-none');
-            document.getElementById('midtransOrderIdText').innerText = '-';
             return;
         }
 

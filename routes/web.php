@@ -35,6 +35,7 @@ Route::post('/kantin/order', [PaymentGatewayController::class, 'createOrder'])->
 Route::get('/kantin/api/vendors-customer', [PaymentGatewayController::class, 'listVendorForCustomer'])->name('pg.api.vendors.for.customer');
 Route::get('/kantin/api/vendors-customer/{idvendor}/menus', [PaymentGatewayController::class, 'listMenuByVendorForCustomer'])->name('pg.api.vendor-menus.for.customer');
 Route::post('/kantin/pay/{idpesanan}', [PaymentGatewayController::class, 'payOrder'])->name('pg.pay');
+Route::get('/kantin/receipt/{idpesanan}', [PaymentGatewayController::class, 'receipt'])->name('pg.receipt');
 Route::post('/kantin/midtrans/notification', [PaymentGatewayController::class, 'midtransNotification'])->name('pg.midtrans.notification');
 
 
@@ -91,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     // Modul 8 - Praktikum Aktual (Web-Based Scanners)
     Route::get('/scan/barcode', [App\Http\Controllers\ScanController::class, 'barcode'])->name('scan.barcode');
     Route::get('/scan/qr', [App\Http\Controllers\ScanController::class, 'qr'])->name('scan.qr');
+    Route::get('/scan/api/pesanan/{id}', [App\Http\Controllers\ScanController::class, 'getPesanan'])->name('scan.api.pesanan');
     
     // Customer
     Route::get('/customer/index', [App\Http\Controllers\CustomerController::class, 'index'])->name('customer.index');

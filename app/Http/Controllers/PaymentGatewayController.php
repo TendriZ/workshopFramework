@@ -27,6 +27,18 @@ class PaymentGatewayController extends Controller
         return view('payment-gateway.customer-asAdmin');
     }
 
+    public function receipt($idpesanan)
+    {
+        $pesanan = \App\Models\Pesanan::findOrFail($idpesanan);
+
+        $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $qrResult = $writer->write($qrCode);
+        $qrBase64 = base64_encode($qrResult->getString());
+
+        return view('payment-gateway.receipt', compact('pesanan', 'qrBase64'));
+    }
+
     public function listVendor()
     {
         return response()->json([
