@@ -200,7 +200,7 @@
                                     <div class="label-harga">Rp {{ number_format($slot['harga'], 0, ',', '.') }}</div>
                                     <div class="label-timestamp">{{ $slot['timestamp'] }}</div>
                                     <div class="barcode-container">
-                                        <img src="data:image/png;base64,{{ $slot['barcode'] }}" style="height: 6px; max-width: 15mm;" alt="barcode">
+                                        <img src="data:image/svg+xml;base64,{{ $slot['barcode'] }}" style="height: 6px; max-width: 15mm;" alt="barcode">
                                         <div class="label-id">{{ $slot['id_barang'] }}</div>
                                     </div>
                                 </div>
