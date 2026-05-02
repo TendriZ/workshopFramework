@@ -32,7 +32,7 @@ class PaymentGatewayController extends Controller
         $pesanan = \App\Models\Pesanan::findOrFail($idpesanan);
 
         $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
-        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $writer = new \Endroid\QrCode\Writer\\SvgWriter();
         $qrResult = $writer->write($qrCode);
         $qrBase64 = base64_encode($qrResult->getString());
 
@@ -202,7 +202,7 @@ class PaymentGatewayController extends Controller
         $this->applyMidtransStatus($pesanan, (array) $status);
 
         $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
-        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $writer = new \Endroid\QrCode\Writer\\SvgWriter();
         $qrResult = $writer->write($qrCode);
         $qrBase64 = base64_encode($qrResult->getString());
 

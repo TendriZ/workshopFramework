@@ -13,7 +13,7 @@
                 <h4 class="card-title text-success">Pembayaran Berhasil!</h4>
                 <p class="text-muted">Simpan QR Code ini untuk ditunjukkan kepada vendor kantin.</p>
                 <hr>
-                <img src="data:image/png;base64,{{ $qrBase64 }}" alt="QR Code Pesanan" class="img-fluid mb-3" style="max-width: 250px;">
+                <img src="data:image/svg+xml;base64,{{ $qrBase64 }}" alt="QR Code Pesanan" class="img-fluid mb-3" style="max-width: 250px;">
                 <h5>ID Pesanan: <strong>{{ $pesanan->idpesanan }}</strong></h5>
                 <p class="mb-1"><strong>Status:</strong> <span class="badge bg-success">{{ strtoupper($pesanan->status_bayar) }}</span></p>
                 <p><strong>Total:</strong> Rp {{ number_format($pesanan->total, 0, ',', '.') }}</p>
