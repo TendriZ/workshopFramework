@@ -88,6 +88,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/kantin/vendor/menu/{idmenu}', [PaymentGatewayController::class, 'vendorMenuDestroy'])->name('pg.vendor.menu.destroy');
     Route::get('/kantin/vendor/pesanan-lunas', [PaymentGatewayController::class, 'paidOrders'])->name('pg.vendor.paid-orders');
 
+    // Modul 8 - Praktikum Aktual (Web-Based Scanners)
+    Route::get('/scan/barcode', [App\Http\Controllers\ScanController::class, 'barcode'])->name('scan.barcode');
+    Route::get('/scan/qr', [App\Http\Controllers\ScanController::class, 'qr'])->name('scan.qr');
+    
     // Customer
     Route::get('/customer/index', [App\Http\Controllers\CustomerController::class, 'index'])->name('customer.index');
     Route::get('/customer/create1', [App\Http\Controllers\CustomerController::class, 'create1'])->name('customer.create1');
