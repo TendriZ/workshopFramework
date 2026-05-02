@@ -53,6 +53,28 @@
             </a>
         </li>
 
+        <li class="nav-item {{ Request::is('scan/*') ? 'active' : '' }}">
+            <a class="nav-link {{ Request::is('scan/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#scanMenu" aria-expanded="{{ Request::is('scan/*') ? 'true' : 'false' }}">
+                <span class="menu-title">Scanner Kamera</span>
+                <i class="mdi mdi-qrcode-scan menu-icon"></i>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ Request::is('scan/*') ? 'show' : '' }}" id="scanMenu">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('scan/barcode') ? 'active' : '' }}" href="{{ route('scan.barcode') }}">
+                            Barcode (Praktikum 1)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('scan/qr') ? 'active' : '' }}" href="{{ route('scan.qr') }}">
+                            QR Code (Praktikum 2)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link {{ Request::is('js/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#jsMenu" aria-expanded="{{ Request::is('js/*') ? 'true' : 'false' }}">
                 <span class="menu-title">JS Exercise</span>
