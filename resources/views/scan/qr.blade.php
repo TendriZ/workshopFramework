@@ -67,29 +67,42 @@
         beepAudio.currentTime = 0;
         beepAudio.play().catch(e => console.log('Audio Play Error:', e));
 
-        try {
-            // Karena QR Code digenerate langsung dari JSON (PosController@success), 
-            // kita bisa melakukan parsing javascript secara mandiri tanpa AJAX backend lagi.
-            let detail = JSON.parse(decodedText);
-            
-            $('#res-id').text(detail.id_penjualan);
-            $('#res-status').text(detail.payment_status);
-            $('#res-waktu').text(detail.timestamp);
-            $('#res-total').text('Rp ' + parseInt(detail.total).toLocaleString('id-ID'));
-            
-            let tbody = '';
-            detail.items.forEach(function(item) {
-                tbody += `<tr>
-                            <td>${item.nama}</td>
-                            <td>${item.qty} pcs</td>
-                          </tr>`;
-            });
-            $('#res-items').html(tbody);
-            
-            $('#resultCard').removeClass('d-none');
-        } catch (e) {
-             $('#errorCard').text("Format QR Tidak Dikenali. Gagal mem-parsing data.").removeClass('d-none');
-        }
+        // Panggil data Modul 7 (Kantin Payment Gateway) berdasarkan string QRCode (ID Pesanan)
+        $.ajax({
+            url: "/scan/api/pesanan/" + decodedText,
+            type: "GET",
+            success: function(res) {
+                if (res.status === 'success') {
+                    let detail = res.data;
+                    
+                    $('#res-id').text(detail.idpesanan);
+                    
+                    // Format Badge Status
+                    if (detail.status_bayar === 'settlement' || detail.status_bayar === 'capture') {
+                        $('#res-status').html('<span class="badge bg-success">LUNAS ('+detail.status_bayar+')</span>');
+                    } else {
+                        $('#res-status').html('<span class="badge bg-warning text-dark">'+detail.status_bayar+'</span>');
+                    }
+                    
+                    $('#res-waktu').text('-'); // Opsional
+                    $('#res-total').text('Rp ' + parseInt(detail.total).toLocaleString('id-ID'));
+                    
+                    let tbody = '';
+                    detail.items.forEach(function(item) {
+                        tbody += `<tr>
+                                    <td>${item.nama_menu}</td>
+                                    <td>${item.jumlah} pcs</td>
+                                  </tr>`;
+                    });
+                    $('#res-items').html(tbody);
+                    
+                    $('#resultCard').removeClass('d-none');
+                }
+            },
+            error: function(err) {
+                 $('#errorCard').text("Data Pesanan (ID: " + decodedText + ") tidak ditemukan.").removeClass('d-none');
+            }
+        });
     }
 
     function onScanFailure(error) {
