@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 use Midtrans\Config as MidtransConfig;
 use Midtrans\Snap;
 use Midtrans\Transaction;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\SvgWriter;
 
 class PaymentGatewayController extends Controller
 {
@@ -31,8 +33,8 @@ class PaymentGatewayController extends Controller
     {
         $pesanan = \App\Models\Pesanan::findOrFail($idpesanan);
 
-        $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
-        $writer = new \Endroid\QrCode\Writer\SvgWriter();
+        $qrCode = new QrCode((string)$pesanan->idpesanan);
+        $writer = new SvgWriter();
         $qrResult = $writer->write($qrCode);
         $qrBase64 = base64_encode($qrResult->getString());
 
@@ -201,8 +203,8 @@ class PaymentGatewayController extends Controller
         $status = Transaction::status($pesanan->order_id_midtrans);
         $this->applyMidtransStatus($pesanan, (array) $status);
 
-        $qrCode = new \Endroid\QrCode\QrCode((string)$pesanan->idpesanan);
-        $writer = new \Endroid\QrCode\Writer\SvgWriter();
+        $qrCode = new QrCode((string)$pesanan->idpesanan);
+        $writer = new SvgWriter();
         $qrResult = $writer->write($qrCode);
         $qrBase64 = base64_encode($qrResult->getString());
 
