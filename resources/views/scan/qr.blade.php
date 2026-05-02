@@ -36,7 +36,9 @@
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
     const beepAudio = new Audio("{{ asset('audio/beep.mp3') }}");
@@ -102,4 +104,4 @@
         });
     });
 </script>
-@endsection
+@endpush

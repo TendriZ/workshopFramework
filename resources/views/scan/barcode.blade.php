@@ -24,7 +24,9 @@
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <!-- Library HTML5 QR Code (Supports barcode Code128) -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 
@@ -75,4 +77,4 @@
         scanner.render(onScanSuccess, onScanFailure);
     });
 </script>
-@endsection
+@endpush
