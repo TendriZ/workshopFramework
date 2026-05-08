@@ -30,7 +30,7 @@
                 <td>{{ $t->longitude }}</td>
                 <td>{{ $t->accuracy }}</td>
                 <td>
-                    <a href="{{ route('kunjungan.cetak', $t->barcode) }}" class="btn btn-sm btn-info text-white" target="_blank">Cetak Barcode</a>
+                    <a href="{{ route('kunjungan.cetak-barcode', $t->barcode) }}" class="btn btn-sm btn-info text-white" target="_blank">Cetak Barcode</a>
                 </td>
             </tr>
             @empty

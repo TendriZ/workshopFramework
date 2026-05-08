@@ -120,7 +120,7 @@
 
         // 1. Dapatkan Data Toko dari DB API
         $.ajax({
-            url: "/kunjungan-toko/api/" + decodedText,
+            url: "/api/toko/" + decodedText,
             type: "GET",
             success: async function(res) {
                 if (res.status === 'success') {
