@@ -118,3 +118,13 @@ Route::middleware(['vendor.auth'])->group(function () {
     Route::delete('/vendor/menu/{id}', [App\Http\Controllers\VendorController::class, 'destroyMenu'])->name('vendor.menu.destroy');
 });
 
+
+// =============================================
+// MODUL 9 : KUNJUNGAN TOKO/GEOLOCATION
+// =============================================
+Route::middleware(['auth'])->group(function () {
+    Route::resource('kunjungan', App\Http\Controllers\KunjunganTokoController::class);
+    Route::get('kunjungan/cetak-barcode/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'cetakBarcode'])->name('kunjungan.cetak-barcode');
+    Route::get('kunjungan/scan/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'scanVisit'])->name('kunjungan.scan');
+    Route::get('/api/toko/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'apiToko'])->name('api.toko');
+});

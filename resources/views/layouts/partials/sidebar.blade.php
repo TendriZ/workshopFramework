@@ -120,6 +120,11 @@
                             Point of Sales
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('kunjungan*') ? 'active' : '' }}" href="{{ route('kunjungan.index') }}">
+                            Geolocation Toko
+                        </a>
+                    </li>
                 </ul>
             </div>
         </li>
