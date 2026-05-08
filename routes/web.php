@@ -100,6 +100,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer/store1', [App\Http\Controllers\CustomerController::class, 'store1'])->name('customer.store1');
     Route::get('/customer/create2', [App\Http\Controllers\CustomerController::class, 'create2'])->name('customer.create2');
     Route::post('/customer/store2', [App\Http\Controllers\CustomerController::class, 'store2'])->name('customer.store2');
+
+    // MODUL 9 : KUNJUNGAN TOKO/GEOLOCATION
+    Route::resource('kunjungan', App\Http\Controllers\KunjunganTokoController::class);
+    Route::get('kunjungan/cetak-barcode/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'cetakBarcode'])->name('kunjungan.cetak-barcode');
+    Route::get('kunjungan/scan', [App\Http\Controllers\KunjunganTokoController::class, 'scanVisit'])->name('kunjungan.scan');
+    Route::get('/api/toko/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'apiToko'])->name('api.toko');
+
 });
 
 // =============================================
@@ -119,12 +126,4 @@ Route::middleware(['vendor.auth'])->group(function () {
 });
 
 
-// =============================================
-// MODUL 9 : KUNJUNGAN TOKO/GEOLOCATION
-// =============================================
-Route::middleware(['auth'])->group(function () {
-    Route::resource('kunjungan', App\Http\Controllers\KunjunganTokoController::class);
-    Route::get('kunjungan/cetak-barcode/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'cetakBarcode'])->name('kunjungan.cetak-barcode');
-    Route::get('kunjungan/scan/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'scanVisit'])->name('kunjungan.scan');
-    Route::get('/api/toko/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'apiToko'])->name('api.toko');
-});
+
