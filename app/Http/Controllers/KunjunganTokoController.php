@@ -25,6 +25,7 @@ class KunjunganTokoController extends Controller
         $request->validate([
             'barcode' => 'required|string|max:8|unique:lokasi_toko,barcode',
             'nama_toko' => 'required|string|max:50',
+            'alamat' => 'nullable|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'accuracy' => 'required|numeric',
@@ -35,10 +36,47 @@ class KunjunganTokoController extends Controller
         return redirect()->route('kunjungan.index')->with('success', 'Lokasi toko berhasil ditambahkan!');
     }
 
+    public function show($barcode)
+    {
+        $toko = LokasiToko::findOrFail($barcode);
+        return view('kunjungan-toko.show', compact('toko'));
+    }
+
+    public function edit($barcode)
+    {
+        $toko = LokasiToko::findOrFail($barcode);
+        return view('kunjungan-toko.edit', compact('toko'));
+    }
+
+    public function update(Request $request, $barcode)
+    {
+        $request->validate([
+            'barcode' => 'required|string|max:8|unique:lokasi_toko,barcode,' . $barcode . ',barcode',
+            'nama_toko' => 'required|string|max:50',
+            'alamat' => 'nullable|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'accuracy' => 'required|numeric',
+        ]);
+
+        $toko = LokasiToko::findOrFail($barcode);
+        $toko->update($request->all());
+
+        return redirect()->route('kunjungan.index')->with('success', 'Lokasi toko berhasil diperbarui!');
+    }
+
+    public function destroy($barcode)
+    {
+        $toko = LokasiToko::findOrFail($barcode);
+        $toko->delete();
+
+        return redirect()->route('kunjungan.index')->with('success', 'Lokasi toko berhasil dihapus!');
+    }
+
     public function cetakBarcode($barcode)
     {
         $toko = LokasiToko::findOrFail($barcode);
-        
+
         $qrCode = new QrCode($toko->barcode);
         $writer = new SvgWriter();
         $qrResult = $writer->write($qrCode);

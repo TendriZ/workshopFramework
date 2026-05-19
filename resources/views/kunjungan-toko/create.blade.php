@@ -1,54 +1,92 @@
 @extends('layouts.app')
 
+@section('title', 'Input Titik Awal Toko - Kunjungan')
+
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="mdi mdi-home"></i> Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('kunjungan.index') }}">Daftar Toko</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Input Toko Baru</li>
+@endsection
+
 @section('content')
-<div class="container">
-    <h2>Input Titik Awal Toko</h2>
-    <div class="card mt-3">
-        <div class="card-header bg-primary text-white">Data Toko Baru</div>
-        <div class="card-body">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('kunjungan.store') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label>Barcode ID (Max 8 Char)</label>
-                    <input type="text" name="barcode" class="form-control" required placeholder="Contoh: TK001" maxlength="8">
-                </div>
-                <div class="mb-3">
-                    <label>Nama Toko</label>
-                    <input type="text" name="nama_toko" class="form-control" required placeholder="Contoh: Toko Jaya Abadi">
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label>Latitude</label>
-                        <input type="number" step="any" name="latitude" id="lat" class="form-control" required readonly>
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Data Toko Baru</h4>
+            </div>
+            <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <div class="col-md-4">
-                        <label>Longitude</label>
-                        <input type="number" step="any" name="longitude" id="lng" class="form-control" required readonly>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Accuracy (Meter)</label>
-                        <input type="number" step="any" name="accuracy" id="acc" class="form-control" required readonly>
-                    </div>
-                </div>
+                @endif
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="button" id="btn-geoloc" class="btn btn-secondary">Get Location (Geoloc)</button>
-                    <button type="submit" id="btn-submit" class="btn btn-primary" disabled>Simpan Data</button>
-                    <a href="{{ route('kunjungan.index') }}" class="btn btn-outline-secondary">Batal</a>
-                </div>
-                <span id="loc-status" class="text-muted ms-2 mt-2 d-block"></span>
-            </form>
+                <form action="{{ route('kunjungan.store') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label>Barcode ID (Max 8 Char) <span class="text-danger">*</span></label>
+                        <input type="text" name="barcode" class="form-control" required placeholder="Contoh: TK001" maxlength="8">
+                        <small class="form-text text-muted">Barcode unik sebagai identifikasi toko</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Toko <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_toko" class="form-control" required placeholder="Contoh: Toko Jaya Abadi">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="alamat" class="form-control" rows="3" placeholder="Alamat lengkap toko"></textarea>
+                    </div>
+
+                    <div class="card bg-light mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="mdi mdi-map-marker"></i> Koordinat Lokasi</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Latitude <span class="text-danger">*</span></label>
+                                    <input type="number" step="any" name="latitude" id="lat" class="form-control" required readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Longitude <span class="text-danger">*</span></label>
+                                    <input type="number" step="any" name="longitude" id="lng" class="form-control" required readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Accuracy (Meter) <span class="text-danger">*</span></label>
+                                    <input type="number" step="any" name="accuracy" id="acc" class="form-control" required readonly>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button type="button" id="btn-geoloc" class="btn btn-secondary">
+                                    <i class="mdi mdi-crosshairs-gps"></i> Ambil Lokasi Akurat
+                                </button>
+                                <span id="loc-status" class="text-muted ms-2"></span>
+                            </div>
+
+                            <div class="alert alert-info mt-2">
+                                <small><strong>Catatan:</strong> Fungsi ini akan mendapatkan lokasi dengan accuracy terbaik (≤50m) secara otomatis. Proses ini membutuhkan waktu sekitar 10-15 detik.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" id="btn-submit" class="btn btn-primary" disabled>
+                            <i class="mdi mdi-content-save"></i> Simpan Data
+                        </button>
+                        <a href="{{ route('kunjungan.index') }}" class="btn btn-outline-secondary">
+                            <i class="mdi mdi-arrow-left"></i> Kembali
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

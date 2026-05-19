@@ -183,6 +183,32 @@
             </div>
         </li>
 
-        
+        <li class="nav-item {{ Request::is('admin/antrian*') ? 'active' : '' }}">
+            <a class="nav-link {{ Request::is('admin/antrian*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#antrianMenu" aria-expanded="{{ Request::is('admin/antrian*') ? 'true' : 'false' }}">
+                <span class="menu-title">Sistem Antrian</span>
+                <i class="mdi mdi-human-queue menu-icon"></i>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ Request::is('admin/antrian*') ? 'show' : '' }}" id="antrianMenu">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('admin/antrian') ? 'active' : '' }}" href="{{ route('antrian.admin') }}">
+                            Dashboard Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/guest" target="_blank">
+                            Form Pendaftaran
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/papan" target="_blank">
+                            Papan Antrian
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
     </ul>
 </nav>

@@ -10,13 +10,19 @@ class LokasiToko extends Model
     protected $primaryKey = 'barcode';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false;
 
     protected $fillable = [
         'barcode',
         'nama_toko',
+        'alamat',
         'latitude',
         'longitude',
-        'accuracy',
+        'accuracy'
+    ];
+
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
+        'accuracy' => 'float'
     ];
 }

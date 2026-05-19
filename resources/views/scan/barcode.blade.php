@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Scanner Barcode Label (Praktikum 1)</h2>
+    <h2>Scanner Label Barcode </h2>
     <div class="row mt-4">
         <div class="col-md-6">
             <div id="reader" width="600px"></div>
@@ -36,14 +36,14 @@
     let scanner = null;
 
     function onScanSuccess(decodedText, decodedResult) {
-        // Hentikan scan a.k.a Clear scanner
+        // Hentikan scan dengan kata lain itu ngeclear scannernya
         scanner.clear();
         
-        // Bunyikan beep pendek
+        // Bunyiin beep pendek
         beepAudio.currentTime = 0;
         beepAudio.play().catch(e => console.log('Audio Play Error:', e));
 
-        // Panggil API pencaharian Barang menggunakan AJAX
+        // Manggil API searching barang pakai AJAX
         $('#errorCard').addClass('d-none');
         
         $.ajax({
@@ -71,7 +71,7 @@
     $(document).ready(function() {
         scanner = new Html5QrcodeScanner(
             "reader",
-            { fps: 10, qrbox: {width: 250, height: 150} },
+            { fps: 60, qrbox: {width: 500, height: 300} },
             /* verbose= */ false
         );
         scanner.render(onScanSuccess, onScanFailure);

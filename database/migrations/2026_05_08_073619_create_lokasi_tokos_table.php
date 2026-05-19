@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('lokasi_toko', function (Blueprint $table) {
             $table->string('barcode', 8)->primary();
             $table->string('nama_toko', 50);
+            $table->text('alamat')->nullable();
             $table->double('latitude');
             $table->double('longitude');
             $table->double('accuracy');
+            $table->timestamps();
         });
     }
 

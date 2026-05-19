@@ -16,7 +16,6 @@
                 <div class="card-body">
                     <p><strong>ID Penjualan:</strong> <span id="res-id">-</span></p>
                     <p><strong>Status:</strong> <span id="res-status" class="badge bg-success">-</span></p>
-                    <p><strong>Waktu:</strong> <span id="res-waktu">-</span></p>
                     <hr>
                     <table class="table table-bordered">
                         <thead>
@@ -84,7 +83,6 @@
                         $('#res-status').html('<span class="badge bg-warning text-dark">'+detail.status_bayar+'</span>');
                     }
                     
-                    $('#res-waktu').text('-'); // Opsional
                     $('#res-total').text('Rp ' + parseInt(detail.total).toLocaleString('id-ID'));
                     
                     let tbody = '';

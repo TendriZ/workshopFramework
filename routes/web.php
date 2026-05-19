@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PaymentGatewayController;
+use App\Http\Controllers\AntrianController;
 
 
 Route::get('/', function () {
@@ -26,6 +27,13 @@ Route::post('/verifikasi-otp/resend', [GoogleAuthController::class, 'resendOtp']
 
 
 Auth::routes();
+
+// SSE & Sistem Antrian (Public access - tidak butuh auth)
+Route::get('/antrian/stream', [AntrianController::class, 'stream']);
+Route::get('/guest', [AntrianController::class, 'index'])->name('antrian.guest');
+Route::post('/guest/store', [AntrianController::class, 'store'])->name('antrian.store');
+Route::get('/guest/queue/{id}', [AntrianController::class, 'queue'])->name('antrian.queue');
+Route::get('/papan', [AntrianController::class, 'papan'])->name('antrian.papan');
 
 Route::get('/test', [HomeController::class, 'test'])->name('test');
 
@@ -106,6 +114,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('kunjungan/scan', [App\Http\Controllers\KunjunganTokoController::class, 'scanVisit'])->name('kunjungan.scan');
     Route::get('/api/toko/{barcode}', [App\Http\Controllers\KunjunganTokoController::class, 'apiToko'])->name('api.toko');
     Route::resource('kunjungan', App\Http\Controllers\KunjunganTokoController::class);
+
+    // Sistem Antrian (Admin Dashboard)
+    Route::get('/admin/antrian', [AntrianController::class, 'admin'])->name('antrian.admin');
+    Route::post('/admin/antrian/call', [AntrianController::class, 'call'])->name('antrian.call');
+    Route::post('/admin/antrian/call-next', [AntrianController::class, 'callNext'])->name('antrian.call-next');
+    Route::post('/admin/antrian/skip', [AntrianController::class, 'skip'])->name('antrian.skip');
 
 });
 
