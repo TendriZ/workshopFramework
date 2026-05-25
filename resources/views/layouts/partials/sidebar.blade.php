@@ -183,6 +183,31 @@
             </div>
         </li>
 
+        <li class="nav-item {{ Request::is('nfc/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#nfcMenu" aria-expanded="{{ Request::is('nfc/*') ? 'true' : 'false' }}">
+            <span class="menu-title">NFC Absensi</span>
+            <i class="mdi mdi-nfc menu-icon"></i>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse {{ Request::is('nfc/*') ? 'show' : '' }}" id="nfcMenu">
+            <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('nfc.index') ? 'active' : '' }}" href="{{ route('nfc.index') }}">
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('nfc.scan') ? 'active' : '' }}" href="{{ route('nfc.scan') }}">
+                        Scanner NFC
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('nfc.daftar') ? 'active' : '' }}" href="{{ route('nfc.daftar') }}">
+                        Daftar Kartu
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <li class="nav-item {{ Request::is('admin/antrian*') ? 'active' : '' }}">
             <a class="nav-link {{ Request::is('admin/antrian*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#antrianMenu" aria-expanded="{{ Request::is('admin/antrian*') ? 'true' : 'false' }}">
                 <span class="menu-title">Sistem Antrian</span>

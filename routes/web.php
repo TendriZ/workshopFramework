@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PaymentGatewayController;
+use App\Http\Controllers\NFCController;
 use App\Http\Controllers\AntrianController;
 
 
@@ -120,6 +121,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/antrian/call', [AntrianController::class, 'call'])->name('antrian.call');
     Route::post('/admin/antrian/call-next', [AntrianController::class, 'callNext'])->name('antrian.call-next');
     Route::post('/admin/antrian/skip', [AntrianController::class, 'skip'])->name('antrian.skip');
+
+    // MODUL 11 : WEB NFC API - ABSENSI
+    Route::get('/nfc', [NFCController::class, 'index'])->name('nfc.index');
+    Route::get('/nfc/scan', [NFCController::class, 'scan'])->name('nfc.scan');
+    Route::get('/nfc/daftar', [NFCController::class, 'daftar'])->name('nfc.daftar');
+    Route::post('/nfc/daftar', [NFCController::class, 'store'])->name('nfc.store');
+    Route::get('/nfc/{id}/edit', [NFCController::class, 'edit'])->name('nfc.edit');
+    Route::put('/nfc/{id}', [NFCController::class, 'update'])->name('nfc.update');
+    Route::delete('/nfc/{id}', [NFCController::class, 'destroy'])->name('nfc.destroy');
+    Route::get('/api/nfc/kartu', [NFCController::class, 'apiDaftarKartu'])->name('api.nfc.kartu');
+    Route::post('/api/nfc/absen', [NFCController::class, 'apiAbsen'])->name('api.nfc.absen');
+    Route::get('/api/nfc/riwayat', [NFCController::class, 'apiRiwayat'])->name('api.nfc.riwayat');
+    Route::post('/api/nfc/scan-serial', [NFCController::class, 'apiScanSerial'])->name('api.nfc.scan-serial');
+    Route::get('/api/nfc/kartu/get-all', [NFCController::class, 'apiGetAllKartu'])->name('api.nfc.get-all');
 
 });
 
