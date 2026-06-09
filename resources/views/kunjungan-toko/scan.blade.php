@@ -3,7 +3,6 @@
 @section('title', 'Scanner Kunjungan Toko - Sales')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="mdi mdi-home"></i> Home</a></li>
     <li class="breadcrumb-item"><a href="{{ route('kunjungan.index') }}">Daftar Toko</a></li>
     <li class="breadcrumb-item active" aria-current="page">Scanner Kunjungan</li>
 @endsection
@@ -29,6 +28,18 @@
                                 <div id="reader" style="width: 100%; max-width: 400px; margin: 0 auto;"></div>
                                 <button id="btn-rescan" class="btn btn-primary mt-3 d-none">
                                     <i class="mdi mdi-refresh"></i> Scan Ulang
+                                </button>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="button" id="btn-scan-lbs" class="btn btn-secondary">
+                                    <i class="mdi mdi-crosshairs-gps"></i> Scan Lokasi Saat Ini (Bypass Geolocation)
+                                </button>
+                                <button type="button" id="btn-export" class="btn btn-outline-success ml-2" onclick="exportData()">
+                                    <i class="mdi mdi-file-export"></i> Export Data
+                                </button>
+                                <button type="button" id="btn-reset" class="btn btn-danger ml-2" onclick="resetAbsensiHariIni()">
+                                    <i class="mdi mdi-refresh"></i> Reset Absensi Hari Ini
                                 </button>
                             </div>
                         </div>
@@ -98,7 +109,7 @@
         const BASE_THRESHOLD = 300; // Radius maksimum yang diizinkan dalam meter
         let scanner = null;
 
-        // Formula Haversine - Lampiran 2
+        // Formula Haversine pada lampiran 2
         function haversine(lat1, lng1, lat2, lng2) {
             const R = 6371000; // Radius Bumi dalam meter
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -111,7 +122,7 @@
             return Math.floor(R * c);
         }
 
-        // Fungsi Geolocation Akurat - Lampiran 1
+        // Fungsi Geolocation Akurat pada lampiran 1
         function getAccuratePosition(targetAccuracy = 50, maxWait = 15000) {
             return new Promise((resolve, reject) => {
                 let bestResult = null;
@@ -152,7 +163,7 @@
 
             scanner = new Html5QrcodeScanner(
                 "reader",
-                { fps: 10, qrbox: {width: 250, height: 250} },
+                { fps: 60, qrbox: {width: 250, height: 250} },
                 false
             );
             scanner.render(onScanSuccess, onScanFailure);

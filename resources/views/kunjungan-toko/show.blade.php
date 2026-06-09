@@ -3,7 +3,6 @@
 @section('title', 'Detail Toko - Kunjungan')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="mdi mdi-home"></i> Home</a></li>
     <li class="breadcrumb-item"><a href="{{ route('kunjungan.index') }}">Daftar Toko</a></li>
     <li class="breadcrumb-item active" aria-current="page">Detail Toko</li>
 @endsection

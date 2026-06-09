@@ -120,11 +120,6 @@
                             Point of Sales
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('kunjungan*') ? 'active' : '' }}" href="{{ route('kunjungan.index') }}">
-                            Geolocation Toko
-                        </a>
-                    </li>
                 </ul>
             </div>
         </li>
@@ -183,29 +178,38 @@
             </div>
         </li>
 
-        <li class="nav-item {{ Request::is('nfc/*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#nfcMenu" aria-expanded="{{ Request::is('nfc/*') ? 'true' : 'false' }}">
-            <span class="menu-title">NFC Absensi</span>
-            <i class="mdi mdi-nfc menu-icon"></i>
-            <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse {{ Request::is('nfc/*') ? 'show' : '' }}" id="nfcMenu">
-            <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('nfc.index') ? 'active' : '' }}" href="{{ route('nfc.index') }}">
-                        Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('nfc.scan') ? 'active' : '' }}" href="{{ route('nfc.scan') }}">
-                        Scanner NFC
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('nfc.daftar') ? 'active' : '' }}" href="{{ route('nfc.daftar') }}">
-                        Daftar Kartu
-                    </a>
-                </li>
-            </ul>
+        <li class="nav-item {{ Request::is('kunjungan*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('kunjungan.index') }}">
+                <span class="menu-title">Geolocation Toko</span>
+                <i class="mdi mdi-map-marker-radius menu-icon"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('nfc*') ? '' : 'collapsed' }}" data-bs-toggle="collapse" href="#nfcMenu" aria-expanded="{{ Request::is('nfc*') ? 'true' : 'false' }}">
+                <span class="menu-title">NFC Absensi</span>
+                <i class="mdi mdi-nfc menu-icon"></i>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ Request::is('nfc*') ? 'show' : '' }}" id="nfcMenu">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('nfc') || Request::routeIs('nfc.index') ? 'active' : '' }}" href="{{ route('nfc.index') }}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('nfc/scan') || Request::routeIs('nfc.scan') ? 'active' : '' }}" href="{{ route('nfc.scan') }}">
+                            Scanner NFC
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('nfc/daftar') || Request::routeIs('nfc.daftar') ? 'active' : '' }}" href="{{ route('nfc.daftar') }}">
+                            Daftar Kartu
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item {{ Request::is('admin/antrian*') ? 'active' : '' }}">

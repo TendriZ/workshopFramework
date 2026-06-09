@@ -14,14 +14,14 @@ class AntrianController extends Controller
 
         return response()->stream(function () {
             while (true) {
-                $data = Cache::get('antrian_data', function () {
-                    return [
-                        'waiting' => Antrian::waiting()->get(),
-                        'called' => Antrian::called()->first(),
-                        'skipped' => Antrian::skipped()->get(),
-                        'last_updated' => now()->toIso8601String()
-                    ];
-                });
+                // FIX: Query langsung ke database untuk real-time update
+                // Cache dihapus di sini untuk mencegah stale data
+                $data = [
+                    'waiting' => Antrian::waiting()->get(),
+                    'called' => Antrian::called()->first(),
+                    'skipped' => Antrian::skipped()->get(),
+                    'last_updated' => now()->toIso8601String()
+                ];
 
                 echo 'event: queue-update' . PHP_EOL;
                 echo 'data: ' . json_encode($data) . PHP_EOL;
@@ -163,11 +163,13 @@ class AntrianController extends Controller
 
     private function updateCache()
     {
+        // Cache TTL dikurangi dari 60 detik ke 5 detik untuk prevent stale data
+        // Cache digunakan sebagai optimization, bukan single source of truth
         Cache::put('antrian_data', [
             'waiting' => Antrian::waiting()->get(),
             'called' => Antrian::called()->first(),
             'skipped' => Antrian::skipped()->get(),
             'last_updated' => now()->toIso8601String()
-        ], 60);
+        ], 5);
     }
 }

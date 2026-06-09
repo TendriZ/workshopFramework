@@ -11,7 +11,7 @@ class KunjunganTokoController extends Controller
 {
     public function index()
     {
-        $tokos = LokasiToko::orderBy('nama_toko')->get();
+        $tokos = LokasiToko::orderBy('nama_toko', 'ASC')->get();
         return view('kunjungan-toko.index', compact('tokos'));
     }
 
