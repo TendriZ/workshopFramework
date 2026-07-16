@@ -35,7 +35,7 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('nfc.daftar.store') }}" method="POST">
+                        <form action="{{ route('nfc.store') }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6">
@@ -81,6 +81,29 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            {{-- TAMBAHKAN INI --}}
+                            <div class="form-group">
+                                <label>Serial Number Kartu <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="text"
+                                        id="serial_number_input"
+                                        name="serial_number"
+                                        class="form-control @error('serial_number') is-invalid @enderror"
+                                        placeholder="Belum di-scan, klik tombol Scan..."
+                                        readonly
+                                        required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text bg-secondary text-white">
+                                            <i class="mdi mdi-nfc"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                @error('serial_number')
+                                    <span class="text-danger small">{{ $message }}</span>
+                                @enderror
+                                <small class="text-muted">Klik "Scan Serial Number" lalu tempelkan kartu NFC ke HP</small>
                             </div>
 
                             <div class="d-flex gap-2">
@@ -184,11 +207,11 @@
                                     <button onclick="editKartu(${k.id})" class="btn btn-sm btn-warning">
                                         <i class="mdi mdi-pencil"></i>
                                     </button>
-                                    @if($k->is_active)
+                                    ${k.is_active ? `
                                         <button onclick="toggleKartu(${k.id})" class="btn btn-sm btn-secondary">
                                             <i class="mdi mdi-block-helper"></i>
                                         </button>
-                                    @endif
+                                    ` : ''}
                                 </td>
                             </tr>
                         `).join('');
@@ -227,7 +250,7 @@
                 });
 
                 ndef.addEventListener('reading', ({ serialNumber }) => {
-                    const serialInput = document.querySelector('input[name="serial_number"]');
+                    const serialInput = document.getElementById('serial_number_input'); // ✅ pakai ID
                     serialInput.value = serialNumber;
                     serialInput.readOnly = true;
 
@@ -238,8 +261,14 @@
                         timer: 1500,
                         showConfirmButton: false
                     });
+                });
 
-                    ndef.close();
+                ndef.addEventListener('readingerror', () => {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tag Kosong / Tidak Support',
+                        text: 'Tag ini terbaca, namun isinya tidak dikenali / bukan format NDEF. (Biasanya e-KTP, e-Toll, dll).'
+                    });
                 });
 
                 ndef.addEventListener('error', (error) => {
@@ -258,6 +287,6 @@
             }
         });
 
-        function loadDaftarKartu();
+        loadDaftarKartu();
     </script>
 @endpush

@@ -1,17 +1,17 @@
-<script src="{{ asset('template/vendors/js/vendor.bundle.base.js') }}"></script>
+<script src="/template/vendors/js/vendor.bundle.base.js"></script>
 
-<script src="{{ asset('template/vendors/chart.js/Chart.min.js') }}"></script>
-<script src="{{ asset('template/vendors/progressbar.js/progressbar.min.js') }}"></script>
-<script src="{{ asset('template/vendors/jvectormap/jquery-jvectormap.min.js') }}"></script>
-<script src="{{ asset('template/vendors/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-<script src="{{ asset('template/vendors/owl-carousel-2/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('template/js/jquery.cookie.js') }}" type="text/javascript"></script>
+<script src="/template/vendors/chart.js/Chart.min.js"></script>
+<script src="/template/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/template/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+<script src="/template/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script src="/template/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+<script src="/template/js/jquery.cookie.js" type="text/javascript"></script>
 
-<script src="{{ asset('template/js/off-canvas.js') }}"></script>
-<script src="{{ asset('template/js/hoverable-collapse.js') }}"></script>
-<script src="{{ asset('template/js/misc.js') }}"></script>
-<script src="{{ asset('template/js/settings.js') }}"></script>
-<script src="{{ asset('template/js/todolist.js') }}"></script>
+<script src="/template/js/off-canvas.js"></script>
+<script src="/template/js/hoverable-collapse.js"></script>
+<script src="/template/js/misc.js"></script>
+<script src="/template/js/settings.js"></script>
+<script src="/template/js/todolist.js"></script>
 
 <script>
 function submitWithSpinner(btn) {
@@ -33,4 +33,4 @@ function deleteWithSpinner(btn) {
 }
 </script>
 
-<script src="{{ asset('template/js/dashboard.js') }}"></script>
+<script src="/template/js/dashboard.js"></script>

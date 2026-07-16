@@ -57,30 +57,113 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         const antrianId = {{ $antrian->id }};
-        const eventSource = new EventSource('/antrian/stream');
+        let eventSource = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 10;
 
-        eventSource.addEventListener('queue-update', function(event) {
-            const data = JSON.parse(event.data);
-            console.log('SSE Update:', data);
+        // Function untuk connect ke SSE
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
 
+            console.log('[QUEUE] Connecting to SSE for antrian ID:', antrianId);
+            eventSource = new EventSource('/antrian/stream');
+
+            eventSource.addEventListener('queue-update', function(event) {
+                const data = JSON.parse(event.data);
+                console.log('[QUEUE] SSE Update received:', data);
+                updateUI(data);
+                reconnectAttempts = 0; // Reset reconnect counter
+            });
+
+            eventSource.addEventListener('connection-status', function(event) {
+                const data = JSON.parse(event.data);
+                console.log('[QUEUE] Connection status:', data.status);
+
+                if (data.status === 'disconnected') {
+                    console.log('[QUEUE] SSE disconnected, attempting reconnect...');
+                    attemptReconnect();
+                }
+            });
+
+            eventSource.addEventListener('error', function(error) {
+                console.error('[QUEUE] SSE Error:', error);
+                eventSource.close();
+
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    const delay = reconnectAttempts * 1000; // Exponential backoff
+                    console.log(`[QUEUE] Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts} in ${delay}ms`);
+                    setTimeout(connectSSE, delay);
+                } else {
+                    console.error('[QUEUE] Max reconnect attempts reached');
+                }
+            });
+
+            eventSource.addEventListener('open', function() {
+                console.log('[QUEUE] SSE Connection established');
+                reconnectAttempts = 0;
+            });
+        }
+
+        // Function untuk reconnect SSE
+        function attemptReconnect() {
+            if (reconnectAttempts < maxReconnectAttempts) {
+                reconnectAttempts++;
+                setTimeout(connectSSE, 3000);
+            }
+        }
+
+        function updateUI(data) {
             const waitingList = data.waiting || [];
-            const currentAntrian = waitingList.find(a => a.id === antrianId);
+            const calledList = data.called ? [data.called] : [];
+            const skippedList = data.skipped || [];
 
-            if (currentAntrian) {
+            // Check jika antrian ini ada di waiting
+            const waitingAntrian = waitingList.find(a => a.id === antrianId);
+            // Check jika antrian ini sudah dipanggil
+            const calledAntrian = calledList.find(a => a.id === antrianId);
+            // Check jika antrian ini dilewati
+            const skippedAntrian = skippedList.find(a => a.id === antrianId);
+
+            if (calledAntrian) {
+                // Reload halaman jika status berjadi called
+                window.location.reload();
+            } else if (skippedAntrian) {
+                // Update UI untuk skipped status
                 const statusBadge = document.querySelector('.badge');
                 const alertBox = document.querySelector('.alert');
 
-                if (currentAntrian.status === 'called') {
-                    window.location.reload();
+                if (statusBadge) {
+                    statusBadge.className = 'badge badge-danger badge-pill';
+                    statusBadge.textContent = 'Terlewat';
+                }
+
+                if (alertBox) {
+                    alertBox.className = 'alert alert-danger';
+                    alertBox.innerHTML = `
+                        <h5>Nomor Antrian Dilewati</h5>
+                        <p class="mb-0">Mohon maaf, nomor antrian Anda telah dilewati.</p>
+                        <p class="mb-0 small text-muted">Silakan daftar ulang.</p>
+                    `;
                 }
             }
+        }
+
+        // Initialize SSE connection saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            connectSSE();
         });
 
-        eventSource.onerror = function(error) {
-            console.error('SSE Error:', error);
-        };
+        // Cleanup SSE connection saat halaman ditutup
+        window.addEventListener('beforeunload', function() {
+            if (eventSource) {
+                eventSource.close();
+            }
+        });
     </script>
-@endsection
+@endpush

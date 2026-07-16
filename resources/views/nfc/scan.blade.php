@@ -176,17 +176,30 @@
         });
 
         function onReading({ serialNumber, message }) {
-            console.log('Reading:', { serialNumber, message });
+        console.log('NFC terbaca - Serial:', serialNumber);
 
-            // Decode data dari records
-            let isi = '';
-            for (const record of message.records) {
-                isi += new TextDecoder().decode(record.data);
+        // Langsung update status supaya ada feedback
+        updateStatus('info', 'Kartu terdeteksi, memvalidasi...');
+
+        // Decode records secara opsional (tidak wajib untuk absensi)
+        let isi = '';
+        try {
+            if (message && message.records && message.records.length > 0) {
+                for (const record of message.records) {
+                    try {
+                        isi += new TextDecoder().decode(record.data);
+                    } catch (e) {
+                        console.warn('Skip record tidak bisa di-decode:', e);
+                    }
+                }
             }
-
-            // Kirim ke backend untuk validasi
-            kirimKeBackend(serialNumber, isi);
+        } catch (e) {
+            console.warn('Error decode message, lanjut dengan serial saja:', e);
         }
+
+        // Serial number sudah cukup untuk absensi
+        kirimKeBackend(serialNumber, isi);
+    }
 
         function onError(error) {
             console.error('NFC Error:', error);
@@ -223,7 +236,7 @@
                 } else {
                     updateStatus('error', data.message);
                     displayHasilBasic({
-                        kartu_nfc: { serial_number: serialNumber }
+                        serial_number: serialNumber
                     }, 'Kartu Tidak Ditemukan');
                 }
             })

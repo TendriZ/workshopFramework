@@ -107,7 +107,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const eventSource = new EventSource('/antrian/stream');
@@ -115,6 +115,94 @@
         eventSource.addEventListener('queue-update', function(event) {
             const data = JSON.parse(event.data);
             updateUI(data);
+        });
+
+        let eventSource = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 10;
+
+        // Function untuk connect ke SSE
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            console.log('[ADMIN] Connecting to SSE...');
+            eventSource = new EventSource('/antrian/stream');
+
+            eventSource.addEventListener('queue-update', function(event) {
+                const data = JSON.parse(event.data);
+                console.log('[ADMIN] SSE Update received:', data);
+                updateUI(data);
+                reconnectAttempts = 0; // Reset reconnect counter
+            });
+
+            eventSource.addEventListener('connection-status', function(event) {
+                const data = JSON.parse(event.data);
+                console.log('[ADMIN] Connection status:', data.status);
+
+                if (data.status === 'disconnected') {
+                    console.log('[ADMIN] SSE disconnected, attempting reconnect...');
+                    attemptReconnect();
+                }
+            });
+
+            eventSource.addEventListener('error', function(error) {
+                console.error('[ADMIN] SSE Error:', error);
+                eventSource.close();
+
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    const delay = reconnectAttempts * 1000; // Exponential backoff
+                    console.log(`[ADMIN] Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts} in ${delay}ms`);
+                    setTimeout(connectSSE, delay);
+                } else {
+                    console.error('[ADMIN] Max reconnect attempts reached');
+                    showReconnectFailedNotification();
+                }
+            });
+
+            eventSource.addEventListener('open', function() {
+                console.log('[ADMIN] SSE Connection established');
+                reconnectAttempts = 0;
+            });
+        }
+
+        // Function untuk reconnect SSE
+        function attemptReconnect() {
+            if (reconnectAttempts < maxReconnectAttempts) {
+                reconnectAttempts++;
+                setTimeout(connectSSE, 3000);
+            }
+        }
+
+        // Function untuk show reconnect failed notification
+        function showReconnectFailedNotification() {
+            const existingToast = document.querySelector('.swal2-container');
+            if (existingToast) return;
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Koneksi Terputus',
+                text: 'Gagal terhubung ke server. Memuat ulang halaman...',
+                timer: 3000,
+                showConfirmButton: false,
+                didClose: () => {
+                    location.reload();
+                }
+            });
+        }
+
+        // Initialize SSE connection saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            connectSSE();
+        });
+
+        // Cleanup SSE connection saat halaman ditutup
+        window.addEventListener('beforeunload', function() {
+            if (eventSource) {
+                eventSource.close();
+            }
         });
 
         eventSource.onerror = function(error) {
@@ -284,15 +372,5 @@
                 });
             }
         });
-
-        let lastCalled = null;
-        eventSource.addEventListener('queue-update', function(event) {
-            const data = JSON.parse(event.data);
-            const called = data.called || null;
-
-            if (called && (!lastCalled || called.id !== lastCalled.id)) {
-                lastCalled = called;
-            }
-        });
     </script>
-@endsection
+@endpush

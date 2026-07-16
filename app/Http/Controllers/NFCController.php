@@ -125,26 +125,27 @@ class NFCController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kartu' => 'required|string|max:100',
-            'jenis' => 'required|in:peserta,dosen,staff',
-            'nim' => 'nullable|string|max:20|required_if:jenis,peserta',
-            'nama' => 'nullable|string|max:100|required_if:jenis,peserta',
-            'kelas' => 'nullable|string|max:50'
+            'serial_number' => 'required|string|max:50|unique:kartu_nfcs,serial_number', // ✅ tambah
+            'nama_kartu'    => 'required|string|max:100',
+            'jenis'         => 'required|in:peserta,dosen,staff',
+            'nim'           => 'nullable|string|max:20|required_if:jenis,peserta',
+            'nama'          => 'nullable|string|max:100|required_if:jenis,peserta',
+            'kelas'         => 'nullable|string|max:50'
         ]);
 
         $kartu = KartuNfc::create([
-            'nama_kartu' => $request->nama_kartu,
-            'jenis' => $request->jenis,
-            'is_active' => true
+            'serial_number' => $request->serial_number, // ✅ tambah
+            'nama_kartu'    => $request->nama_kartu,
+            'jenis'         => $request->jenis,
+            'is_active'     => true
         ]);
 
-        // Jika jenis adalah peserta, buat juga data peserta
         if ($request->jenis === 'peserta') {
             \App\Models\Peserta::create([
-                'nim' => $request->nim,
-                'nama' => $request->nama,
-                'kartu_nfc_id' => $kartu->id,
-                'kelas' => $request->kelas
+                'nim'         => $request->nim,
+                'nama'        => $request->nama,
+                'kartu_nfc_id'=> $kartu->id,
+                'kelas'       => $request->kelas
             ]);
         }
 
